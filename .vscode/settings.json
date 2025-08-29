@@ -1,0 +1,5 @@
+{
+    "prettier.endOfLine": "lf",
+    "files.eol": "\n",
+    "css.lint.unknownAtRules": "ignore"
+}
