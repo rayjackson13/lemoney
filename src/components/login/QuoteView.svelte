@@ -3,7 +3,6 @@
 	import { fly } from 'svelte/transition'
 
 	export let quote: Quote
-	console.log(quote)
 </script>
 
 <div

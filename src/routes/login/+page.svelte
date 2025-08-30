@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
 	import Logo from '$assets/icons/logo.svg?component'
 	import QuoteView from '$components/login/QuoteView.svelte'
+	import { FirebaseController } from '$utils/firebase.js'
 	import { onMount } from 'svelte'
 	import { Spring } from 'svelte/motion'
 
@@ -44,6 +46,11 @@
 			buttonAnim.set({ y: 0, opacity: 1 })
 		}, 1500)
 	})
+
+	const onLoginPressed = async () => {
+		await FirebaseController.authorize()
+		goto('/')
+	}
 </script>
 
 <svelte:head>
@@ -66,7 +73,7 @@
 			</div>
 
 			<div class="w-full" style={buttonStyle}>
-				<button type="button" class="Button-light" on:click={() => alert('login')}>
+				<button type="button" class="Button-light" onclick={onLoginPressed}>
 					<i class="fab fa-google text-[16px]"></i>
 					Войти с Google
 				</button>

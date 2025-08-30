@@ -44,6 +44,8 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"@fortawesome/fontawesome-free": "^7.0.0"
+		"@fortawesome/fontawesome-free": "^7.0.0",
+		"firebase": "^12.2.1",
+		"firebase-admin": "^13.5.0"
 	}
 }
