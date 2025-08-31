@@ -2,37 +2,36 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 
 :root {
-	--tracking-tightest: -0.0005em;
-	/* letter-spacing */
+  --tracking-tightest: -0.0005em;
+  /* letter-spacing */
 }
 
 body {
-	font-family: 'Inter', 'Segoe UI', sans-serif;
-	color: var(--color-gray-900)
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: var(--color-gray-900);
 }
 
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .LoginBackground {
-	@apply absolute top-0 left-0 z-[-1] h-full w-full bg-cover bg-center;
-	@apply bg-[url('/login-bg-mobile.png')] lg:bg-[url('/login-bg.png')];
+  @apply absolute top-0 left-0 z-[-1] h-full w-full bg-cover bg-center;
+  @apply bg-[url('/login-bg-mobile.png')] lg:bg-[url('/login-bg.png')];
 }
 
 .LoginBackground::after {
-	@apply absolute top-0 left-0 h-full w-full;
-	content: '';
-	background-color: rgb(0 0 0 / 35%);
+  @apply absolute top-0 left-0 h-full w-full;
+  content: '';
+  background-color: rgb(0 0 0 / 35%);
 }
 
 .Button-light {
-	@apply flex h-10 w-full items-center justify-center gap-2 rounded-lg;
-	@apply bg-neutral-50 px-3 py-1 text-base font-medium text-slate-700 cursor-pointer;
-	@apply hover:bg-neutral-200 active:bg-neutral-300 transition duration-100;
-
+  @apply flex h-10 w-full items-center justify-center gap-2 rounded-lg;
+  @apply cursor-pointer bg-neutral-50 px-3 py-1 text-base font-medium text-slate-700;
+  @apply transition duration-100 hover:bg-neutral-200 active:bg-neutral-300;
 }
 
 @source inline("AppBackground-desktop md:AppBackground-desktop");

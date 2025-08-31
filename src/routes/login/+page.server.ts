@@ -8,11 +8,11 @@ import { redirect } from '@sveltejs/kit'
 export const prerender = true
 
 export const load: LayoutServerLoad = ({ locals }) => {
-	if (locals.user) {
-		throw redirect(302, '/')
-	}
+  if (locals.user) {
+    throw redirect(302, '/')
+  }
 
-	const quote: Quote = quotes[Math.floor(Math.random() * quotes.length)]
+  const quote: Quote = quotes[Math.floor(Math.random() * quotes.length)]
 
-	return { quote }
+  return { quote }
 }

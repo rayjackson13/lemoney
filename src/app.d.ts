@@ -2,21 +2,21 @@
 // for information about these interfaces
 
 export type UserInfo = {
-	name?: string
-	picture?: string
-	email?: string
+  name?: string
+  picture?: string
+  email?: string
 }
 
 declare global {
-	namespace App {
-		// interface Error {}
-		interface Locals {
-			user: UserInfo | null
-		}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
+  namespace App {
+    // interface Error {}
+    interface Locals {
+      user: UserInfo | null
+    }
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
+  }
 }
 
 export {}
