@@ -48,8 +48,9 @@
 	})
 
 	const onLoginPressed = async () => {
-		await FirebaseController.authorize()
-		goto('/')
+		const isSuccessful = await FirebaseController.authorize()
+
+		if (isSuccessful) goto('/records', { replaceState: true })
 	}
 </script>
 

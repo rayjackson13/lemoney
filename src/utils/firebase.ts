@@ -24,10 +24,10 @@ export class FirebaseController {
 		return this._app
 	}
 
-	static async authorize() {
+	static async authorize(): Promise<boolean> {
 		if (!this._auth) {
 			console.error('Attempted to call Firebase Auth before it was initialized.')
-			return
+			return false
 		}
 
 		try {
@@ -37,8 +37,10 @@ export class FirebaseController {
 				method: 'POST',
 				body: JSON.stringify({ accessToken: token.token }),
 			})
+			return true
 		} catch (error) {
 			console.error('Unsuccessful login attempt:', error)
+			return false
 		}
 	}
 }
