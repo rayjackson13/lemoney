@@ -5,8 +5,15 @@
   import { slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { goto, invalidateAll } from '$app/navigation'
+  import { onMount } from 'svelte'
+  import type { UserInfo } from '../../app'
 
-  let { user } = $props()
+  type Props = {
+    user: UserInfo
+  }
+
+  let { user }: Props = $props()
+  let isReady = $state(false)
   let isMenuOpen = $state(false)
 
   const navItems: NavigationItem[] = [
@@ -47,10 +54,14 @@
       console.error('Could not log out', e)
     }
   }
+
+  onMount(() => {
+    isReady = true
+  })
 </script>
 
-{#if user}
-  <header class="AppHeader h-12 w-full px-4 py-2 text-neutral-200 shadow-md" in:slide>
+{#if isReady}
+  <header class="AppHeader h-12 w-full px-4 py-2 text-neutral-200 shadow-md">
     <div
       class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
     >
