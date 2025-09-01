@@ -26,9 +26,7 @@ export async function POST({ request, cookies }) {
 
   cookies.set('__session', sessionCookie, {
     path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
+    httpOnly: false,
   })
 
   return json({ message: 'Authorization successful' }, { status: 200 })

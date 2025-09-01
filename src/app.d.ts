@@ -7,6 +7,10 @@ export type UserInfo = {
   email?: string
 }
 
+export type PageData = {
+  user: UserInfo | null
+}
+
 declare global {
   namespace App {
     // interface Error {}

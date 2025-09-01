@@ -36,6 +36,8 @@ export class FirebaseController {
       await fetch('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ accessToken: token.token }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       })
       return true
     } catch (error) {

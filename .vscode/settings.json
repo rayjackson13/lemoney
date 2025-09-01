@@ -1,5 +1,7 @@
 {
   "prettier.endOfLine": "lf",
   "files.eol": "\n",
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "editor.tabSize": 2,
+  "prettier.useTabs": false
 }

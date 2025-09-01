@@ -12,7 +12,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   try {
     const decodedToken = (await adminAuth.verifySessionCookie(sessionCookie, true)) as UserInfo
-    console.log('decodedToken', decodedToken)
     event.locals.user = decodedToken as UserInfo
   } catch (err) {
     console.warn('Invalid or expired session cookie', err)

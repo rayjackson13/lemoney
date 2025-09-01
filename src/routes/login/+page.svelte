@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
+  import { goto, invalidateAll } from '$app/navigation'
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
   import { FirebaseController } from '$utils/firebase.js'
@@ -50,7 +50,10 @@
   const onLoginPressed = async () => {
     const isSuccessful = await FirebaseController.authorize()
 
-    if (isSuccessful) goto('/records', { replaceState: true })
+    if (isSuccessful) {
+      await invalidateAll()
+      goto('/records', { replaceState: true })
+    }
   }
 </script>
 

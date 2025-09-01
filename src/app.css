@@ -17,6 +17,10 @@ body {
   box-sizing: border-box;
 }
 
+button {
+  cursor: pointer;
+}
+
 .LoginBackground {
   @apply absolute top-0 left-0 z-[-1] h-full w-full bg-cover bg-center;
   @apply bg-[url('/login-bg-mobile.png')] lg:bg-[url('/login-bg.png')];

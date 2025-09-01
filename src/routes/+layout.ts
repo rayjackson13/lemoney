@@ -1,6 +1,6 @@
-// import type { LayoutLoad } from './$types'
+import { userStore } from '$stores/user'
+import type { LayoutLoad } from './$types'
 
-// export const load: LayoutLoad = ({ data }) => {
-// 	// const user = $state(data.user)
-// 	// return { user }
-// }
+export const load: LayoutLoad = ({ data }) => {
+  userStore.set(data.user)
+}

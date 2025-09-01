@@ -16,6 +16,7 @@ const config = {
       $assets: './src/assets',
       $components: './src/components',
       $routes: './src/routes',
+      $stores: './src/stores',
       $types: './src/types',
       $utils: './src/utils',
     },
