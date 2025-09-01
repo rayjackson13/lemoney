@@ -10,9 +10,7 @@
 </script>
 
 <main>
-  {#if $userStore}
-    <Header user={$userStore} />
-  {/if}
+  <Header user={$userStore} />
 
   {@render children?.()}
 </main>
