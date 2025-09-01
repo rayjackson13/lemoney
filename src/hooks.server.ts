@@ -1,6 +1,6 @@
 import type { Handle } from '@sveltejs/kit'
 import { adminAuth } from '$utils/server/firebase-admin'
-import type { UserInfo } from './app'
+import type { UserInfo } from '$types/user'
 
 export const handle: Handle = async ({ event, resolve }) => {
   const sessionCookie = event.cookies.get('__session')

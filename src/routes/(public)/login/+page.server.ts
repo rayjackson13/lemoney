@@ -1,7 +1,7 @@
 import type { Quote } from './types'
 import quotes from './quotes.json'
 import { redirect } from '@sveltejs/kit'
-import type { LayoutServerLoad } from '../$types'
+import type { LayoutServerLoad } from '../../$types'
 
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production

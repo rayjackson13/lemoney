@@ -6,7 +6,8 @@
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { goto, invalidateAll } from '$app/navigation'
   import { onMount } from 'svelte'
-  import type { UserInfo } from '../../app'
+  import TimeBlock from './TimeBlock.svelte'
+  import type { UserInfo } from '$types/user'
 
   type Props = {
     user: UserInfo
@@ -61,10 +62,11 @@
 </script>
 
 {#if isReady}
-  <header class="AppHeader h-12 w-full px-4 py-2 text-neutral-200 shadow-md">
+  <header class="AppHeader h-12 w-full py-2 text-neutral-200 shadow-md">
     <div
       class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
     >
+      <!-- Navigation -->
       <nav class="AppHeader-navbar h-full rounded-lg px-4 backdrop-blur-xs">
         <ul class="flex h-full items-center gap-4">
           {#each navItems as item (item.path)}
@@ -88,7 +90,9 @@
           {/each}
         </ul>
       </nav>
+      <!-- /Navigation -->
 
+      <!-- Profile -->
       <div
         class={clsx(
           'AppHeader-userMenu absolute top-0 right-4 z-1 flex min-h-full',
@@ -115,6 +119,7 @@
           </div>
         </button>
 
+        <!-- User Menu -->
         {#if isMenuOpen}
           <aside class="items-center py-2 text-sm" transition:slide={{ duration: 150 }}>
             <ul>
@@ -137,7 +142,13 @@
             </ul>
           </aside>
         {/if}
+        <!-- /User Menu -->
       </div>
+      <!-- /Profile -->
+
+      <!-- Time Period -->
+      <TimeBlock />
+      <!-- /Time Period -->
     </div>
   </header>
 {/if}
@@ -150,7 +161,8 @@
   }
 
   .AppHeader-navbar,
-  .AppHeader-userMenu {
+  .AppHeader-userMenu,
+  .AppHeader-timeBlock {
     background-color: rgb(0 0 0 / 50%);
   }
 
