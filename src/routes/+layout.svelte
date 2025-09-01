@@ -10,7 +10,7 @@
   FirebaseController.initialize()
 </script>
 
-<main>
+<main class="h-full w-full">
   {#if $user}
     <div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>
       <Header user={$user} />

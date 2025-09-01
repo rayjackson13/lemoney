@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clsx } from 'clsx'
-  import { slide } from 'svelte/transition'
+  import { fly, slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { goto, invalidateAll } from '$app/navigation'
   import type { UserInfo } from '$types/user'
@@ -57,13 +57,13 @@
   {#if isMenuOpen}
     <aside class="items-center py-2 text-sm" transition:slide={{ duration: 150 }}>
       <ul>
-        <li>
+        <li in:fly={{ x: -20 }}>
           <a class="flex items-center py-1 hover:bg-neutral-700" href="/help">
             <i class="fas fa-question w-8! pl-4 text-left! text-xs"></i>
             <span class="px-3">Справка</span>
           </a>
         </li>
-        <li>
+        <li in:fly={{ x: -20, delay: 50 }}>
           <button
             class="flex w-full items-center py-1 hover:bg-neutral-700"
             type="button"

@@ -10,7 +10,7 @@ const getNormalizedTodayDate = (): Date => {
 const getDefaultPeriod = (): [Date, Date] => {
   const today = getNormalizedTodayDate()
 
-  return [setDate(today, 0), lastDayOfMonth(today)]
+  return [setDate(today, 1), lastDayOfMonth(today)]
 }
 
-export const userStore = writable<[Date, Date]>(getDefaultPeriod())
+export const timePeriod = writable<[Date, Date]>(getDefaultPeriod())

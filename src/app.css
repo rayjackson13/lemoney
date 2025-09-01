@@ -6,10 +6,14 @@
   /* letter-spacing */
 }
 
+html,
 body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   color: var(--color-gray-900);
   background-color: #F9FAFB;
+  min-height: 100svh;
+  height: 100%;
+  font-size: 16px;
 }
 
 *,
@@ -37,6 +41,37 @@ button {
   @apply flex h-10 w-full items-center justify-center gap-2 rounded-lg;
   @apply cursor-pointer bg-neutral-50 px-3 py-1 text-base font-medium text-slate-700;
   @apply transition duration-100 hover:bg-neutral-200 active:bg-neutral-300;
+}
+
+.Button-dark {
+  @apply flex h-7 items-center gap-1 rounded-lg bg-slate-700 px-3 py-1 text-xs font-medium text-white;
+  @apply transition-colors hover:bg-slate-600 active:bg-slate-800;
+}
+
+.IconButton {
+  @apply flex h-4 w-4 items-center justify-center text-slate-500 opacity-50;
+  @apply transition-all hover:opacity-100 active:text-slate-700;
+}
+
+.Hotkey {
+  @apply text-[10px] leading-[1] text-slate-500 opacity-50;
+}
+
+.Card {
+  @apply flex flex-col overflow-hidden rounded-lg bg-white shadow-sm;
+}
+
+.Card-header,
+.Card-footer {
+  @apply flex min-h-10 bg-neutral-50 px-4 py-3 items-center gap-2;
+}
+
+.Card-header {
+  @apply border-b-1 border-b-gray-200;
+}
+
+.Card-footer {
+  @apply border-t-1 border-t-gray-200 py-2;
 }
 
 @source inline("AppBackground-desktop md:AppBackground-desktop");
