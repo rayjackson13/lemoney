@@ -1,3 +1,8 @@
+<script lang="ts">
+  import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
+  import MoneyInput from '$components/common/MoneyInput/MoneyInput.svelte'
+</script>
+
 <div class="Card">
   <div class="Card-header items-center justify-between">
     <p class="text-sm leading-[16px] font-medium">Добавить транзакцию</p>
@@ -11,17 +16,12 @@
   </div>
 
   <div class="flex items-center gap-1 px-4 py-2">
-    <input class="h-8 w-29 rounded-lg bg-gray-100 px-2 text-sm" type="date" />
-    <input
-      class="h-8 w-25 rounded-lg bg-gray-100 px-2 text-right text-sm"
-      type="text"
-      placeholder="Сумма"
-    />
-    <input
-      class="h-8 flex-1 rounded-lg bg-gray-100 px-2 text-sm"
-      type="text"
-      placeholder="Описание"
-    />
+    <DatePicker />
+
+    <MoneyInput />
+
+    <input class="Input flex-1" type="text" placeholder="Описание" />
+
     <button class="IconButton" aria-label="Удалить строку">
       <i class="fas fa-xmark pt-[1px] text-sm"></i>
     </button>

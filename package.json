@@ -48,6 +48,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "firebase": "^12.2.1",
-    "firebase-admin": "^13.5.0"
+    "firebase-admin": "^13.5.0",
+    "imask": "^7.6.1"
   }
 }

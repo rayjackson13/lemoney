@@ -58,7 +58,7 @@ button {
 }
 
 .Card {
-  @apply flex flex-col overflow-hidden rounded-lg bg-white shadow-sm;
+  @apply flex flex-col rounded-lg bg-white shadow-sm;
 }
 
 .Card-header,
@@ -67,11 +67,17 @@ button {
 }
 
 .Card-header {
-  @apply border-b-1 border-b-gray-200;
+  @apply border-b-1 border-b-gray-200 rounded-t-lg;
 }
 
 .Card-footer {
-  @apply border-t-1 border-t-gray-200 py-2;
+  @apply border-t-1 border-t-gray-200 py-2 rounded-b-lg;
+}
+
+.Input {
+  @apply h-8 rounded-lg bg-gray-100 px-2 text-sm transition-colors outline-gray-500;
+  @apply hover:outline-1 focus:outline-2 focus:outline-slate-500;
+  @apply placeholder:text-gray-900 placeholder:opacity-70;
 }
 
 @source inline("AppBackground-desktop md:AppBackground-desktop");
