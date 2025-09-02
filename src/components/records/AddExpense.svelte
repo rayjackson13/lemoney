@@ -1,6 +1,16 @@
 <script lang="ts">
+  import Autocomplete from '$components/common/Autocomplete/Autocomplete.svelte'
   import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
   import MoneyInput from '$components/common/MoneyInput/MoneyInput.svelte'
+  import type { Option } from '$types/forms'
+
+  const entryTypes: Option[] = [
+    { name: 'Расход', value: 'expense', ribbon: 'bg-red-300' },
+    { name: 'Доход', value: 'income', ribbon: 'bg-green-300' },
+    { name: 'План', value: 'expense-planned', ribbon: 'bg-red-300' },
+    { name: 'Инвестиции', value: 'investment', ribbon: 'bg-violet-300' },
+    { name: 'Сбережения', value: 'savings', ribbon: 'bg-amber-300' },
+  ]
 </script>
 
 <div class="Card">
@@ -17,6 +27,8 @@
 
   <div class="flex items-center gap-1 px-4 py-2">
     <DatePicker />
+
+    <Autocomplete options={entryTypes} placeholder="Тип" defaultValue="expense" />
 
     <MoneyInput />
 

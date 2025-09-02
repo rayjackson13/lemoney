@@ -22,7 +22,6 @@
 
     mask.on('accept', () => {
       value = mask.unmaskedValue ? Number(mask.unmaskedValue) : null
-      console.log(value)
     })
   })
 </script>

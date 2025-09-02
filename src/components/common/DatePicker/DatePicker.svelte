@@ -78,6 +78,11 @@
     }
   }
 
+  const onFocus = () => {
+    inputRef.select()
+    openCalendar()
+  }
+
   const keyHandler = (ev: KeyboardEvent): void => {
     if (ev.code === 'Escape') {
       inputRef.blur()
@@ -103,7 +108,7 @@
     bind:this={inputRef}
     type="text"
     class="Input w-full"
-    onfocus={openCalendar}
+    onfocus={onFocus}
     oninput={onInput}
     value={formattedDate}
   />
@@ -162,7 +167,6 @@
               isSelected(date) && 'bg-slate-700 text-white',
             )}
             style={index === 0 ? `grid-column: ${firstDayOfWeek}` : ''}
-            class:selected={isSelected(date)}
             onclick={() => selectDate(date)}
             tabindex="-1"
           >
