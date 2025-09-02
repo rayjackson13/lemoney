@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
-  import { addMonths, format, getDay, getDaysInMonth, isValid, startOfMonth } from 'date-fns'
+  import { addMonths, format, getDay, startOfMonth } from 'date-fns'
   import { ru } from 'date-fns/locale'
   import { fly } from 'svelte/transition'
   import imask from 'imask'
@@ -8,33 +8,22 @@
   import type { FormEventHandler } from 'svelte/elements'
   import { onBlurWithin } from '$utils/ui/onBlurWithin'
   import clsx from 'clsx'
+  import { dateToISOString, parseDateFromInputString, parseDateFromISOString } from '$utils/dates'
+  import { getDates } from './helpers/getDates'
 
   type Props = {
-    value?: number
+    value?: string | null
   }
 
-  let inputRef: HTMLInputElement
   let { value = $bindable() }: Props = $props()
   let isCalendarVisible = $state(false)
   let currentMonth = $state(new Date().getMonth())
   let currentYear = $state(new Date().getFullYear())
 
-  const selectedDate = $derived(value ? new Date(value) : new Date())
-
-  const firstDayOfWeek = $derived.by(() =>
-    getDay(startOfMonth(new Date(currentYear, currentMonth))),
-  )
-
-  const getDates = () => {
-    const totalDays = getDaysInMonth(new Date(currentYear, currentMonth))
-    const dates = []
-
-    for (let i = 1; i <= totalDays; i++) {
-      dates.push(new Date(currentYear, currentMonth, i))
-    }
-
-    return dates
-  }
+  let inputRef: HTMLInputElement
+  const selectedDate = $derived(value ? parseDateFromISOString(value)! : new Date())
+  const formattedDate = $derived(selectedDate ? format(selectedDate, 'dd.MM.yyyy') : '')
+  const firstDayOfWeek = $derived(getDay(startOfMonth(new Date(currentYear, currentMonth))))
 
   const openCalendar = () => {
     isCalendarVisible = true
@@ -49,34 +38,25 @@
   const selectDate = (date: Date | null) => {
     if (!date) return
 
-    value = date.getTime()
+    value = dateToISOString(date)
     closeCalendar()
   }
 
-  const formattedDate = $derived.by(() => (selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''))
-
-  const prevMonthClicked = () => {
-    const prev = addMonths(new Date(currentYear, currentMonth), -1)
-    currentMonth = prev.getMonth()
-    currentYear = prev.getFullYear()
-  }
-
-  const nextMonthClicked = () => {
-    const next = addMonths(new Date(currentYear, currentMonth), 1)
-    currentMonth = next.getMonth()
-    currentYear = next.getFullYear()
+  const changeMonth = (offset: number) => {
+    const date = addMonths(new Date(currentYear, currentMonth), offset)
+    currentMonth = date.getMonth()
+    currentYear = date.getFullYear()
   }
 
   const onInput: FormEventHandler<HTMLInputElement> = (ev) => {
     const inputValue = (ev.currentTarget as HTMLInputElement)?.value
-    const [day, month, year] = inputValue.split('.').map((i) => Number(i))
-    const date = new Date(year, month - 1, day)
+    const date = parseDateFromInputString(inputValue)
 
-    if (String(year).length === 4 && isValid(date)) {
-      value = date.getTime()
-      currentMonth = date.getMonth()
-      currentYear = date.getFullYear()
-    }
+    if (!date) return
+
+    value = dateToISOString(date)
+    currentMonth = date.getMonth()
+    currentYear = date.getFullYear()
   }
 
   const onFocus = () => {
@@ -92,7 +72,7 @@
   }
 
   const isSelected = (date: Date): boolean =>
-    selectedDate && format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
+    !!selectedDate && dateToISOString(date) === dateToISOString(selectedDate)
 
   onMount(() => {
     imask(inputRef, { mask: Date })
@@ -130,7 +110,7 @@
         in:fly={{ x: 16, duration: 200 }}
       >
         <button
-          onclick={prevMonthClicked}
+          onclick={() => changeMonth(-1)}
           class="IconButton text-sm"
           aria-label="Предыдущий месяц"
           tabindex="-1"
@@ -144,7 +124,7 @@
         </span>
 
         <button
-          onclick={nextMonthClicked}
+          onclick={() => changeMonth(1)}
           class="IconButton text-sm"
           aria-label="Следующий месяц"
           tabindex="-1"
@@ -163,7 +143,7 @@
           </div>
         {/each}
 
-        {#each getDates() as date, index (date?.getTime())}
+        {#each getDates(currentYear, currentMonth) as date, index (date?.getTime())}
           <button
             class={clsx(
               'h-8 cursor-pointer rounded text-center text-sm transition-colors hover:bg-gray-200 active:bg-gray-300',

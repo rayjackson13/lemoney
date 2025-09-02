@@ -15,7 +15,7 @@ export type Option = {
 export type Transaction = {
   amount: number | null
   category: string | null
-  date: number
+  date: string
   description?: string
   id: string
   type?: keyof typeof TransactionTypes

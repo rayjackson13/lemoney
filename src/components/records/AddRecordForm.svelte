@@ -2,11 +2,13 @@
   import type { Transaction } from '$types/forms'
   import { onMount } from 'svelte'
   import RecordRow from './RecordRow.svelte'
+  import { dateToISOString, parseDateFromISOString } from '$utils/dates'
+  import { isValid } from 'date-fns'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
     category: null,
-    date: new Date().getTime(),
+    date: dateToISOString(new Date()),
     description: '',
     id: crypto.randomUUID(),
     type: 'Expense',
@@ -28,10 +30,20 @@
     records = [{ ...getDefaultRecord(), id }]
   }
 
+  const isRowValid = (row: Transaction): boolean => {
+    const date = parseDateFromISOString(row.date)
+    return !!date && isValid(date) && row.amount !== null
+  }
+
+  const validate = (): Transaction[] => {
+    return records.filter(isRowValid)
+  }
+
   const onSubmit = (ev?: SubmitEvent): void => {
     ev?.preventDefault()
 
-    console.log('submit', $state.snapshot(records))
+    const validRows = validate()
+    console.log('submit', $state.snapshot(validRows))
   }
 
   const handleShortcuts = (ev: KeyboardEvent): void => {
