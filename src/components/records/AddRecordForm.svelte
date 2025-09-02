@@ -39,11 +39,19 @@
     return records.filter(isRowValid)
   }
 
-  const onSubmit = (ev?: SubmitEvent): void => {
+  const onSubmit = async (ev?: SubmitEvent): Promise<void> => {
     ev?.preventDefault()
 
     const validRows = validate()
-    console.log('submit', $state.snapshot(validRows))
+    try {
+      await fetch('/api/transactions', {
+        method: 'POST',
+        body: JSON.stringify(validRows),
+      })
+      records = [getDefaultRecord()]
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const handleShortcuts = (ev: KeyboardEvent): void => {
