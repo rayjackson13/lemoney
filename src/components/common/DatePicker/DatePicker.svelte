@@ -10,15 +10,16 @@
   import clsx from 'clsx'
 
   type Props = {
-    defaultValue?: Date
+    value?: number
   }
 
   let inputRef: HTMLInputElement
-  let { defaultValue = new Date() }: Props = $props()
-  let selectedDate = $state(defaultValue)
+  let { value = $bindable() }: Props = $props()
   let isCalendarVisible = $state(false)
   let currentMonth = $state(new Date().getMonth())
   let currentYear = $state(new Date().getFullYear())
+
+  const selectedDate = $derived(value ? new Date(value) : new Date())
 
   const firstDayOfWeek = $derived.by(() =>
     getDay(startOfMonth(new Date(currentYear, currentMonth))),
@@ -48,7 +49,7 @@
   const selectDate = (date: Date | null) => {
     if (!date) return
 
-    selectedDate = date
+    value = date.getTime()
     closeCalendar()
   }
 
@@ -67,12 +68,12 @@
   }
 
   const onInput: FormEventHandler<HTMLInputElement> = (ev) => {
-    const value = (ev.currentTarget as HTMLInputElement)?.value
-    const [day, month, year] = value.split('.').map((i) => Number(i))
+    const inputValue = (ev.currentTarget as HTMLInputElement)?.value
+    const [day, month, year] = inputValue.split('.').map((i) => Number(i))
     const date = new Date(year, month - 1, day)
 
     if (String(year).length === 4 && isValid(date)) {
-      selectedDate = date
+      value = date.getTime()
       currentMonth = date.getMonth()
       currentYear = date.getFullYear()
     }
@@ -133,6 +134,7 @@
           class="IconButton text-sm"
           aria-label="Предыдущий месяц"
           tabindex="-1"
+          type="button"
         >
           <i class="fas fa-chevron-left"></i>
         </button>
@@ -146,6 +148,7 @@
           class="IconButton text-sm"
           aria-label="Следующий месяц"
           tabindex="-1"
+          type="button"
         >
           <i class="fas fa-chevron-right"></i>
         </button>
@@ -169,6 +172,7 @@
             style={index === 0 ? `grid-column: ${firstDayOfWeek}` : ''}
             onclick={() => selectDate(date)}
             tabindex="-1"
+            type="button"
           >
             {date ? format(date, 'd') : ''}
           </button>

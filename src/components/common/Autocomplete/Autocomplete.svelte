@@ -8,22 +8,24 @@
   import { fly } from 'svelte/transition'
 
   type Props = {
-    defaultValue?: string
+    classes?: string
     options: Option[]
     placeholder?: string
+    value?: string | null
   }
 
-  const getDefaultOption = (): Option | null =>
-    defaultValue ? (options.find((item) => item.value === defaultValue) ?? null) : null
+  let { classes, options, placeholder, value = $bindable() }: Props = $props()
+
+  const getOptionName = (): Option | null =>
+    value ? (options.find((item) => item.value === value) ?? null) : null
 
   let inputRef: HTMLInputElement
-  let { defaultValue, options, placeholder }: Props = $props()
   let isDropdownVisible = $state(false)
   let isContainerVisible = $state(false)
-  let selectedOption = $state<Option | null>(getDefaultOption())
-  let inputValue = $state(getDefaultOption()?.name ?? '')
   let visibleOptions = $state<Option[]>(options)
   let highlightedIndex = $state<number | null>(null)
+  let inputValue = $derived<string>(getOptionName()?.name ?? '')
+  let selectedOption = $derived<Option | null>(getOptionName())
 
   const openDropdown = (): void => {
     highlightedIndex = null
@@ -51,9 +53,9 @@
   }
 
   const onSelect = (item: Option): void => {
-    if (selectedOption?.value === item.value) return
+    if (value === item.value) return
 
-    selectedOption = item
+    value = item.value
     inputValue = item.name
     closeDropdown()
   }
@@ -93,12 +95,19 @@
   })
 </script>
 
-<div class="relative h-8 w-36" use:onOutsideClick={closeDropdown} use:onBlurWithin={closeDropdown}>
+<div
+  class={clsx('relative h-8 w-36', classes)}
+  use:onOutsideClick={closeDropdown}
+  use:onBlurWithin={closeDropdown}
+>
   <input
     bind:this={inputRef}
     bind:value={inputValue}
     type="text"
-    class={clsx('Input w-full', selectedOption?.ribbon && 'pl-[14px]!')}
+    class={clsx(
+      'Input w-full overflow-hidden pr-8! text-ellipsis',
+      selectedOption?.ribbon && 'pl-[14px]!',
+    )}
     onfocus={onFocus}
     oninput={onInput}
     onblur={onBlur}
@@ -117,23 +126,24 @@
 
   {#if isDropdownVisible && !!visibleOptions.length}
     <div
-      class="absolute z-10 mt-1 w-auto min-w-32 overflow-hidden rounded-lg bg-white py-1 shadow-lg"
-      transition:fly={{ y: -8, duration: 200 }}
-      onintroend={() => (isContainerVisible = true)}
+      class="absolute z-10 mt-1 max-h-[40vh] min-w-32 overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg"
+      transition:fly={{ y: -8, duration: 50 }}
+      onintrostart={() => (isContainerVisible = true)}
       onoutroend={() => (isContainerVisible = false)}
     >
       {#each visibleOptions as option, index (option.value + '-' + isDropdownVisible)}
         {#if isContainerVisible}
           <button
             class={clsx(
-              'relative block w-full px-4 py-1 text-left text-sm transition-colors hover:bg-gray-100 active:bg-gray-200',
-              option.value === selectedOption?.value &&
-                'bg-slate-200 hover:bg-slate-200 active:bg-slate-200',
+              'relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
+              'transition-colors hover:bg-gray-100 active:bg-gray-200',
+              option.value === value && 'bg-slate-200 hover:bg-slate-200 active:bg-slate-200',
               index === highlightedIndex && 'bg-gray-200',
             )}
             onclick={() => onSelect(option)}
             tabindex="-1"
-            transition:fly={{ x: 8, duration: 150, delay: index * 50 }}
+            type="button"
+            transition:fly={{ x: 8, duration: 150, delay: index * 30 }}
           >
             {#if option.ribbon}
               <span class={clsx('ribbon', option.ribbon)}></span>

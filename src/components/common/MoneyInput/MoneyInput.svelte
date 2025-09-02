@@ -5,20 +5,27 @@
   import clsx from 'clsx'
   import { fly } from 'svelte/transition'
 
+  type Props = {
+    value: number | null
+  }
+
+  const maskOptions = {
+    mask: Number,
+    scale: 0,
+    signed: false,
+    thousandsSeparator: ' ',
+    padFractionalZeros: false,
+    normalizeZeros: true,
+    max: 99_999_999,
+  }
+
   let inputRef: HTMLInputElement
   let mask: InputMask
-  let value = $state<number | null>(null)
+  let { value = $bindable() }: Props = $props()
+  let inputValue = $derived(String(value ?? ''))
 
   onMount(() => {
-    mask = imask(inputRef, {
-      mask: Number,
-      scale: 0,
-      signed: false,
-      thousandsSeparator: ' ',
-      padFractionalZeros: false,
-      normalizeZeros: true,
-      max: 99_999_999,
-    })
+    mask = imask(inputRef, maskOptions)
 
     mask.on('accept', () => {
       value = mask.unmaskedValue ? Number(mask.unmaskedValue) : null
@@ -29,12 +36,13 @@
 <div class="relative">
   <input
     bind:this={inputRef}
-    class={clsx('Input w-30 text-right', value !== null && 'pr-5!')}
+    class={clsx('Input w-30 text-right', !!inputValue && 'pr-5!')}
     type="text"
     placeholder="Сумма"
+    bind:value={inputValue}
   />
 
-  {#if value !== null}
+  {#if !!inputValue}
     <div
       class="pointer-events-none absolute top-0 right-0 flex h-full items-center justify-center pr-2 text-sm text-slate-900 opacity-70"
       in:fly={{ x: 8 }}
