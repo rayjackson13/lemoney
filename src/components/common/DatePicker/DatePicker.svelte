@@ -12,16 +12,22 @@
   import { getDates } from './helpers/getDates'
 
   type Props = {
+    classes?: {
+      adornment?: string
+      input?: string
+      root?: string
+    }
+    placeholder?: string
     value?: string | null
   }
 
-  let { value = $bindable() }: Props = $props()
+  let { classes, placeholder, value = $bindable() }: Props = $props()
   let isCalendarVisible = $state(false)
   let currentMonth = $state(new Date().getMonth())
   let currentYear = $state(new Date().getFullYear())
 
   let inputRef: HTMLInputElement
-  const selectedDate = $derived(value ? parseDateFromISOString(value)! : new Date())
+  const selectedDate = $derived(value ? parseDateFromISOString(value)! : null)
   const formattedDate = $derived(selectedDate ? format(selectedDate, 'dd.MM.yyyy') : '')
   const firstDayOfWeek = $derived(getDay(startOfMonth(new Date(currentYear, currentMonth))))
 
@@ -84,18 +90,26 @@
   })
 </script>
 
-<div class="relative h-8 w-30" use:onOutsideClick={closeCalendar} use:onBlurWithin={closeCalendar}>
+<div
+  class={clsx('relative h-8 w-30', classes?.root)}
+  use:onOutsideClick={closeCalendar}
+  use:onBlurWithin={closeCalendar}
+>
   <input
     bind:this={inputRef}
     type="text"
-    class="Input w-full"
+    class={clsx('Input w-full', classes?.input)}
     onfocus={onFocus}
     oninput={onInput}
     value={formattedDate}
+    {placeholder}
   />
 
   <div
-    class="pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-sm text-slate-500"
+    class={clsx(
+      'pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-sm text-slate-500',
+      classes?.adornment,
+    )}
   >
     <i class="fas fa-calendar"></i>
   </div>

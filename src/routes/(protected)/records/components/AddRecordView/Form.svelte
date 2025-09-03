@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Transaction } from '$types/forms'
   import { onMount } from 'svelte'
-  import RecordRow from './RecordRow.svelte'
+  import RecordRow from './Row.svelte'
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
 

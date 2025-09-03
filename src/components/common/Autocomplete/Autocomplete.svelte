@@ -8,7 +8,11 @@
   import { fly } from 'svelte/transition'
 
   type Props = {
-    classes?: string
+    classes?: {
+      adornment?: string
+      input?: string
+      root?: string
+    }
     options: Option[]
     placeholder?: string
     value?: string | null
@@ -96,7 +100,7 @@
 </script>
 
 <div
-  class={clsx('relative h-8 w-36', classes)}
+  class={clsx('relative h-8 w-36', classes?.root)}
   use:onOutsideClick={closeDropdown}
   use:onBlurWithin={closeDropdown}
 >
@@ -107,6 +111,7 @@
     class={clsx(
       'Input w-full overflow-hidden pr-8! text-ellipsis',
       selectedOption?.ribbon && 'pl-[14px]!',
+      classes?.input,
     )}
     onfocus={onFocus}
     oninput={onInput}
@@ -119,7 +124,10 @@
   {/if}
 
   <div
-    class="pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-[10px] text-slate-500"
+    class={clsx(
+      'pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-[10px] text-slate-500',
+      classes?.adornment,
+    )}
   >
     <i class="fas fa-chevron-down"></i>
   </div>
