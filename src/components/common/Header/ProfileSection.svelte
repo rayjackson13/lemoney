@@ -37,7 +37,7 @@
     'cursor-pointer flex-col rounded-lg backdrop-blur-xs transition-colors',
     isMenuOpen && 'AppHeader-userMenu--open shadow-sm',
   )}
-  use:onOutsideClick={closeMenu}
+  use:onOutsideClick={{ callback: closeMenu }}
 >
   <button type="button" class="flex items-center rounded-lg" onclick={toggleMenu}>
     <img class="h-8 w-8 rounded-lg bg-teal-400" src={user.picture} alt="Аватар пользователя" />

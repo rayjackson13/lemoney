@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Transaction } from '$types/forms'
+  import { getTotalSum } from '../../helpers/getTotalSum'
   import DayBlock from './DayBlock.svelte'
   import Header from './Header.svelte'
 
@@ -10,9 +11,7 @@
   let searchValue = $state('')
   const { transactions }: Props = $props()
   const flatList = Array.from(transactions.values()).flat()
-  const transactionSum = Array.from(transactions.values())
-    .flat()
-    .reduce((total, item) => (total += item?.amount ?? 0), 0)
+  const transactionSum = getTotalSum(flatList)
 
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,

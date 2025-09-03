@@ -38,10 +38,6 @@
   <div
     class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
   >
-    <!-- Time Period -->
-    <TimeBlock />
-    <!-- /Time Period -->
-
     <!-- Navigation -->
     <nav class="AppHeader-navbar h-full rounded-lg px-4 backdrop-blur-xs">
       <ul class="flex h-full items-center gap-4">
@@ -65,6 +61,10 @@
       </ul>
     </nav>
     <!-- /Navigation -->
+
+    <!-- Time Period -->
+    <TimeBlock />
+    <!-- /Time Period -->
 
     <!-- Profile -->
     <ProfileSection {user} />

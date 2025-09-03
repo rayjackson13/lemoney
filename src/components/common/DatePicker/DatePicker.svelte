@@ -6,10 +6,10 @@
   import imask from 'imask'
   import { onMount } from 'svelte'
   import type { FormEventHandler } from 'svelte/elements'
-  import { onBlurWithin } from '$utils/ui/onBlurWithin'
   import clsx from 'clsx'
   import { dateToISOString, parseDateFromInputString, parseDateFromISOString } from '$utils/dates'
   import { getDates } from './helpers/getDates'
+  import { teleport } from '$utils/ui/teleport'
 
   type Props = {
     classes?: {
@@ -25,8 +25,10 @@
   let isCalendarVisible = $state(false)
   let currentMonth = $state(new Date().getMonth())
   let currentYear = $state(new Date().getFullYear())
-
   let inputRef: HTMLInputElement
+  let popoverRef = $state<HTMLDivElement>()
+  let inputBox = $state<DOMRect>()
+
   const selectedDate = $derived(value ? parseDateFromISOString(value)! : null)
   const formattedDate = $derived(selectedDate ? format(selectedDate, 'dd.MM.yyyy') : '')
   const firstDayOfWeek = $derived(getDay(startOfMonth(new Date(currentYear, currentMonth))))
@@ -66,6 +68,7 @@
   }
 
   const onFocus = () => {
+    inputBox = inputRef?.getBoundingClientRect()
     inputRef.select()
     openCalendar()
   }
@@ -92,8 +95,7 @@
 
 <div
   class={clsx('relative h-8 w-30', classes?.root)}
-  use:onOutsideClick={closeCalendar}
-  use:onBlurWithin={closeCalendar}
+  use:onOutsideClick={{ callback: closeCalendar, refs: [popoverRef] }}
 >
   <input
     bind:this={inputRef}
@@ -116,8 +118,10 @@
 
   {#if isCalendarVisible}
     <div
-      class="absolute z-10 mt-1 w-64 overflow-hidden rounded-lg bg-white shadow-lg"
+      class="z-10 mt-1 w-64 overflow-hidden rounded-lg bg-white shadow-lg"
       transition:fly={{ y: -8, duration: 200 }}
+      bind:this={popoverRef}
+      use:teleport={inputBox}
     >
       <div
         class="flex items-center justify-between border-b-1 border-b-gray-200 bg-neutral-50 px-4 py-2"

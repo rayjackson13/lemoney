@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Option } from '$types/forms'
-  import { onBlurWithin } from '$utils/ui/onBlurWithin'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
+  import { teleport } from '$utils/ui/teleport'
   import clsx from 'clsx'
   import { onMount } from 'svelte'
   import type { FormEventHandler } from 'svelte/elements'
@@ -23,7 +23,9 @@
   const getOptionName = (): Option | null =>
     value ? (options.find((item) => item.value === value) ?? null) : null
 
-  let inputRef: HTMLInputElement
+  let inputRef = $state<HTMLInputElement>()
+  let popoverRef = $state<HTMLDivElement>()
+  let inputBox = $state<DOMRect>()
   let isDropdownVisible = $state(false)
   let isContainerVisible = $state(false)
   let visibleOptions = $state<Option[]>(options)
@@ -42,7 +44,8 @@
   }
 
   const onFocus = () => {
-    inputRef.select()
+    inputBox = inputRef?.getBoundingClientRect()
+    inputRef?.select()
     openDropdown()
   }
 
@@ -67,8 +70,7 @@
   const keyHandler = (ev: KeyboardEvent): void => {
     if (!isDropdownVisible) return
 
-    if (ev.code === 'Escape') {
-      inputRef.blur()
+    if (ev.code === 'Escape' && document.activeElement === inputRef) {
       closeDropdown()
     }
 
@@ -90,19 +92,24 @@
     }
   }
 
+  function onWindowResize() {
+    closeDropdown()
+  }
+
   onMount(() => {
     document.addEventListener('keydown', keyHandler)
+    window.addEventListener('resize', onWindowResize)
 
     return () => {
       document.removeEventListener('keydown', keyHandler)
+      window.removeEventListener('resize', onWindowResize)
     }
   })
 </script>
 
 <div
   class={clsx('relative h-8 w-36', classes?.root)}
-  use:onOutsideClick={closeDropdown}
-  use:onBlurWithin={closeDropdown}
+  use:onOutsideClick={{ callback: closeDropdown, refs: [popoverRef] }}
 >
   <input
     bind:this={inputRef}
@@ -134,7 +141,9 @@
 
   {#if isDropdownVisible && !!visibleOptions.length}
     <div
-      class="absolute z-10 mt-1 max-h-[40vh] min-w-32 overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg"
+      bind:this={popoverRef}
+      use:teleport={inputBox}
+      class="z-10 mt-1 max-h-[40vh] min-w-full overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg"
       transition:fly={{ y: -8, duration: 50 }}
       onintrostart={() => (isContainerVisible = true)}
       onoutroend={() => (isContainerVisible = false)}
