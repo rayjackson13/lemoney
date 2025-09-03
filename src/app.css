@@ -45,7 +45,15 @@ button {
 
 .Button-dark {
   @apply flex h-7 items-center gap-1 rounded-lg bg-slate-700 px-3 py-1 text-xs font-medium text-white;
-  @apply transition-colors hover:bg-slate-600 active:bg-slate-800;
+  @apply transition-colors;
+}
+
+.Button-dark:not([disabled]) {
+  @apply hover:bg-slate-600 active:bg-slate-800;
+}
+
+.Button-dark[disabled] {
+  @apply opacity-50;
 }
 
 .IconButton {

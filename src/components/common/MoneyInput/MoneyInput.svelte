@@ -39,7 +39,7 @@
   })
 </script>
 
-<div class={clsx('relative', classes?.root)}>
+<div class={clsx('MoneyInput-root relative', classes?.root)}>
   <input
     bind:this={inputRef}
     class={clsx('Input w-30 text-right', !!inputValue && 'pr-5!', classes?.input)}

@@ -20,3 +20,7 @@ export type Transaction = {
   id: string
   type?: keyof typeof TransactionTypes
 }
+
+export type TransactionDTO = Transaction & {
+  key: string
+}

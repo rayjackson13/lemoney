@@ -24,8 +24,8 @@
 </script>
 
 <div
-  class="flex items-center gap-1 px-4"
-  transition:fly={{ x: 16, duration: 150 }}
+  class="AddRecordForm-recordRow flex items-center gap-1 px-4"
+  in:fly={{ x: 16, duration: 150 }}
   data-index={index}
 >
   <DatePicker bind:value={record.date} />

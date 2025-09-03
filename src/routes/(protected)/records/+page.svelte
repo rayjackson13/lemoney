@@ -10,7 +10,7 @@
   <div class="flex flex-1 flex-col gap-4">
     <AddExpenseForm />
 
-    <div class="flex flex-1 gap-4">
+    <div class="flex min-h-0 flex-1 gap-4">
       <TransactionHistory transactions={groupTransactionsByDate(data.transactions)} />
 
       <div class="flex-1"></div>

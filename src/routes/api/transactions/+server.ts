@@ -1,4 +1,4 @@
-import type { Transaction } from '$types/forms.js'
+import type { Transaction, TransactionDTO } from '$types/forms.js'
 import { validateISOString } from '$utils/dates'
 import { adminAuth, adminFS } from '$utils/server/firebase-admin.js'
 import { json, type Cookies } from '@sveltejs/kit'
@@ -21,7 +21,7 @@ const getUserData = async (cookies: Cookies): Promise<DecodedIdToken | null> => 
   return decodedToken ?? null
 }
 
-const getTransactions = async (userId: string, filters?: Filters): Promise<Transaction[]> => {
+const getTransactions = async (userId: string, filters?: Filters): Promise<TransactionDTO[]> => {
   let query: CollectionReference | Query = adminFS.collection(`/users/${userId}/transactions`)
 
   if (filters?.dateFrom) query = query.where('date', '>=', filters.dateFrom)
@@ -33,20 +33,24 @@ const getTransactions = async (userId: string, filters?: Filters): Promise<Trans
     return []
   }
 
-  return snapshot.docs.map((doc) => ({
-    ...(doc.data() as Transaction),
-    id: doc.id,
-  }))
+  return snapshot.docs
+    .map((doc) => ({
+      ...(doc.data() as TransactionDTO),
+      id: doc.id,
+    }))
+    .toSorted((a, b) => a.key.localeCompare(b.key))
 }
 
 const addTransactions = async (userId: string, data: Transaction[]): Promise<void> => {
   const collection = adminFS.collection(`/users/${userId}/transactions`)
+  const timestamp = new Date().getTime()
   let batch = adminFS.batch()
   let count = 0
 
   for (const item of data) {
+    const key = `${timestamp}-${count}`
     const docRef = collection.doc()
-    batch.set(docRef, item)
+    batch.set(docRef, { ...item, key })
     count++
 
     if (count === 500) {

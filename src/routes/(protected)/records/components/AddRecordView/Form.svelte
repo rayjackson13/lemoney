@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Transaction } from '$types/forms'
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import RecordRow from './Row.svelte'
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
@@ -15,9 +15,24 @@
   })
 
   let records = $state<Transaction[]>([getDefaultRecord()])
+  let isSubmitting = $state(false)
+  let rowContainer: HTMLDivElement
 
-  const addRecord = (): void => {
+  const focusLastRecord = (): void => {
+    const input = rowContainer.querySelector(
+      '.AddRecordForm-recordRow:last-child .MoneyInput-root input',
+    ) as HTMLInputElement | null
+
+    if (input) {
+      input.scrollIntoView()
+      input.select()
+    }
+  }
+
+  const addRecord = async (): Promise<void> => {
     records.push(getDefaultRecord())
+    await tick()
+    focusLastRecord()
   }
 
   const removeRecord = (index: number): void => {
@@ -43,7 +58,10 @@
     ev?.preventDefault()
 
     const validRows = validate()
+    if (!validRows.length || isSubmitting) return
+
     try {
+      isSubmitting = true
       await fetch('/api/transactions', {
         method: 'POST',
         body: JSON.stringify(validRows),
@@ -51,6 +69,8 @@
       records = [getDefaultRecord()]
     } catch (e) {
       console.error(e)
+    } finally {
+      isSubmitting = false
     }
   }
 
@@ -88,7 +108,10 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-1 py-2">
+  <div
+    bind:this={rowContainer}
+    class="flex max-h-90 flex-col gap-1 overflow-x-hidden overflow-y-auto py-2"
+  >
     {#each records as record, index (record.id)}
       <RecordRow bind:record={records[index]} {index} {removeRecord} />
     {/each}
@@ -97,7 +120,7 @@
   <div class="Card-footer justify-end">
     <span class="Hotkey">Ctrl+Enter</span>
 
-    <button class="Button-dark" type="submit">
+    <button class="Button-dark" disabled={isSubmitting} type="submit">
       <i class="fas fa-check h-[14px] w-[14px]! text-[12px]"></i>
       <span class="pb-[1px]">Добавить</span>
     </button>

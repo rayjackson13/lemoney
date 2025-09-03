@@ -23,7 +23,7 @@
 <div class="Card flex-1">
   <Header bind:searchValue />
 
-  <div class="flex flex-1 flex-col gap-2 py-2">
+  <div class="flex flex-1 flex-col gap-2 overflow-auto py-2">
     {#each Array.from(transactions) as [dateISO, array] (dateISO)}
       <DayBlock {dateISO} transactions={array} />
     {/each}
