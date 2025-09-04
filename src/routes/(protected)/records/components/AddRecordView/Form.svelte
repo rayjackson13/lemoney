@@ -4,6 +4,7 @@
   import RecordRow from './Row.svelte'
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
+  import { isEqual } from '$utils/isEqual'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
@@ -54,6 +55,11 @@
     return records.filter(isRowValid)
   }
 
+  const isDirty = (): boolean => {
+    const defaultRecord = getDefaultRecord()
+    return records.some((rec) => !isEqual({ ...rec, id: '' }, { ...defaultRecord, id: '' }))
+  }
+
   const onSubmit = async (ev?: SubmitEvent): Promise<void> => {
     ev?.preventDefault()
 
@@ -87,11 +93,19 @@
     }
   }
 
+  function onBeforeUnload(ev: BeforeUnloadEvent) {
+    if (isDirty()) {
+      ev.preventDefault()
+    }
+  }
+
   onMount(() => {
     document.addEventListener('keydown', handleShortcuts, true)
+    window.addEventListener('beforeunload', onBeforeUnload)
 
     return () => {
       document.removeEventListener('keydown', handleShortcuts, true)
+      window.removeEventListener('beforeunload', onBeforeUnload)
     }
   })
 </script>
