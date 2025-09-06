@@ -1,4 +1,4 @@
-import { format, isValid, lastDayOfMonth, setDate } from 'date-fns'
+import { differenceInCalendarDays, format, isValid, lastDayOfMonth, setDate } from 'date-fns'
 
 export const parseDateFromISOString = (iso: string): Date | null => {
   if (!iso) return null
@@ -26,4 +26,10 @@ export const getDefaultTimePeriod = (): [Date, Date] => {
   const today = getNormalizedTodayDate()
 
   return [setDate(today, 1), lastDayOfMonth(today)]
+}
+
+export const getDaysUntilNextMonth = () => {
+  const today = new Date()
+  const endOfMonth = lastDayOfMonth(today)
+  return differenceInCalendarDays(endOfMonth, today) + 1
 }

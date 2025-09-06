@@ -1,6 +1,7 @@
 <script lang="ts">
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
   import type { Transaction } from '$types/forms'
+  import { getDaysUntilNextMonth } from '$utils/dates'
   import SavingsRow from './SavingsRow.svelte'
 
   type Props = {
@@ -8,12 +9,29 @@
   }
 
   const { transactions }: Props = $props()
+  let savings = $state<number | null>(null)
+  let investments = $state<number | null>(null)
+  let daysToIncome = $state<number>(10)
+  const daysLeft = getDaysUntilNextMonth()
 
-  const totalIncome = $derived(
+  const formatter = new Intl.NumberFormat('ru', {
+    maximumFractionDigits: 0,
+  })
+
+  const getSumOfType = (type: Transaction['type']): number =>
     transactions
-      .filter((tr) => tr.type === 'Income')
-      .reduce((total, current) => (total += current.amount ?? 0), 0),
+      .filter((tr) => tr.type === type)
+      .reduce((total, current) => (total += current.amount ?? 0), 0)
+
+  const totalIncome = getSumOfType('Income')
+  const regularExpenses = getSumOfType('Expense')
+  const mandatoryExpenses = getSumOfType('ExpensePlanned')
+  const netAmount = $derived(
+    totalIncome - (regularExpenses + mandatoryExpenses + (savings ?? 0) + (investments ?? 0)),
   )
+
+  const totalDaysLeft = $derived(daysToIncome + daysLeft)
+  const dailyBudget = $derived(netAmount / (totalDaysLeft > 0 ? totalDaysLeft : 1))
 </script>
 
 <div class="Card">
@@ -25,30 +43,32 @@
     <div class="Summary-block">
       <p class="Summary-row">
         <span>Доход</span>
-        <span class="font-medium text-green-600">+224 763 ₽</span>
+        <span class="font-medium text-green-600">+{formatter.format(totalIncome)} ₽</span>
       </p>
 
       <p class="Summary-row">
         <span>Расходы</span>
-        <span class="font-medium text-red-600">-211 021 ₽</span>
-      </p>
-
-      <p class="Summary-row Summary-rowSmall">
-        <span>плановые</span>
-        <span class="text-red-600">169 360 ₽</span>
+        <span class="font-medium text-red-600">
+          -{formatter.format(regularExpenses + mandatoryExpenses)} ₽
+        </span>
       </p>
 
       <p class="Summary-row Summary-rowSmall">
         <span>повседневные</span>
-        <span class="text-red-600">41 661 ₽</span>
+        <span class="text-red-600">{formatter.format(regularExpenses)} ₽</span>
+      </p>
+
+      <p class="Summary-row Summary-rowSmall">
+        <span>плановые</span>
+        <span class="text-red-600">{formatter.format(mandatoryExpenses)} ₽</span>
       </p>
     </div>
 
     <hr class="text-gray-200" />
 
     <div class="Summary-block">
-      <SavingsRow label="Сбережения" value={0} {totalIncome} />
-      <SavingsRow label="Инвестиции" value={0} {totalIncome} />
+      <SavingsRow bind:value={savings} label="Сбережения" {totalIncome} />
+      <SavingsRow bind:value={investments} label="Инвестиции" {totalIncome} />
     </div>
 
     <hr class="text-gray-200" />
@@ -56,15 +76,15 @@
     <div class="Summary-block">
       <p class="Summary-row">
         <span>Остаток дохода</span>
-        <span class="font-medium text-green-600">13 742 ₽</span>
+        <span class="font-medium text-green-600">{formatter.format(netAmount)} ₽</span>
       </p>
 
       <p class="Summary-row">
         <span>Дней до следующего дохода</span>
         <NumberInput
+          bind:value={daysToIncome}
           mode="normal"
           classes={{ input: 'h-6! w-auto! min-w-12 field-sizing-content' }}
-          value={10}
           placeholder="0"
         />
       </p>
@@ -78,7 +98,7 @@
 
     <p class="flex w-full items-center justify-between text-xs leading-[20px] opacity-70">
       <span>Дневной бюджет</span>
-      <span>916 ₽</span>
+      <span>{formatter.format(dailyBudget)} ₽</span>
     </p>
   </div>
 </div>

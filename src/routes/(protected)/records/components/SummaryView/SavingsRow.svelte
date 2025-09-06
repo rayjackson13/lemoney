@@ -3,7 +3,7 @@
 
   type Props = {
     label: string
-    value: number
+    value: number | null
     totalIncome: number
   }
 
@@ -14,7 +14,7 @@
     Math.round((max * (percent ?? 0)) / 100)
 
   let { label, value = $bindable(), totalIncome }: Props = $props()
-  let percentValue = $state(getPercentage(value, totalIncome))
+  let percentValue = $state(getPercentage(value ?? 0, totalIncome))
 
   const onPercentInput = (newValue: number | null) => {
     value = getPercentedValue(newValue ?? 0, totalIncome)
