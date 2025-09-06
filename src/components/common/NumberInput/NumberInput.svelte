@@ -56,7 +56,7 @@
   }
 </script>
 
-<div class={clsx('relative', classes?.root)}>
+<span class={clsx('relative', classes?.root)}>
   <input
     bind:this={inputRef}
     bind:value={inputValue}
@@ -78,4 +78,4 @@
       <span class="w-4 text-right">{mode === 'money' ? '\u20bd' : '%'}</span>
     </div>
   {/if}
-</div>
+</span>

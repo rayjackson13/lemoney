@@ -36,12 +36,14 @@
 
   <input class="Input flex-1" type="text" placeholder="Описание" bind:value={record.description} />
 
-  <Autocomplete
-    classes={{ root: 'w-45' }}
-    options={$categories}
-    placeholder="Категория"
-    bind:value={record.category}
-  />
+  {#if !record.type || ['Expense', 'ExpensePlanned'].includes(record.type)}
+    <Autocomplete
+      classes={{ root: 'w-45' }}
+      options={$categories}
+      placeholder="Категория"
+      bind:value={record.category}
+    />
+  {/if}
 
   <button
     class="IconButton"

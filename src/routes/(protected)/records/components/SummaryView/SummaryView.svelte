@@ -2,15 +2,12 @@
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
   import type { Transaction } from '$types/forms'
   import { getDaysUntilNextMonth } from '$utils/dates'
-  import SavingsRow from './SavingsRow.svelte'
 
   type Props = {
     transactions: Transaction[]
   }
 
   const { transactions }: Props = $props()
-  let savings = $state<number | null>(null)
-  let investments = $state<number | null>(null)
   let daysToIncome = $state<number>(10)
   const daysLeft = getDaysUntilNextMonth()
 
@@ -23,11 +20,19 @@
       .filter((tr) => tr.type === type)
       .reduce((total, current) => (total += current.amount ?? 0), 0)
 
+  const getPercentage = (partialValue: number, totalValue: number) => {
+    return totalValue !== 0 ? Math.round((100 * partialValue) / totalValue) : 0
+  }
+
   const totalIncome = getSumOfType('Income')
   const regularExpenses = getSumOfType('Expense')
   const mandatoryExpenses = getSumOfType('ExpensePlanned')
+  const savingsAmount = getSumOfType('Savings')
+  const savingsPercentage = getPercentage(savingsAmount, totalIncome)
+  const investmentsAmount = getSumOfType('Investment')
+  const investmentsPercentage = getPercentage(investmentsAmount, totalIncome)
   const netAmount = $derived(
-    totalIncome - (regularExpenses + mandatoryExpenses + (savings ?? 0) + (investments ?? 0)),
+    totalIncome - (regularExpenses + mandatoryExpenses + savingsAmount + investmentsAmount),
   )
 
   const totalDaysLeft = $derived(daysToIncome + daysLeft)
@@ -67,8 +72,23 @@
     <hr class="text-gray-200" />
 
     <div class="Summary-block">
-      <SavingsRow bind:value={savings} label="Сбережения" {totalIncome} />
-      <SavingsRow bind:value={investments} label="Инвестиции" {totalIncome} />
+      <p class="Summary-row">
+        <span>Сбережения</span>
+        <span class="flex items-center gap-1 font-medium">
+          <span class="text-xs text-slate-500">{savingsPercentage}%</span>
+          <span class="pb-[2px] text-[10px] leading-2 text-slate-500">&bull;</span>
+          {formatter.format(savingsAmount)} ₽
+        </span>
+      </p>
+
+      <p class="Summary-row">
+        <span>Инвестиции</span>
+        <span class="flex items-center gap-1 font-medium">
+          <span class="text-xs text-slate-500">{investmentsPercentage}%</span>
+          <span class="pb-[2px] text-[10px] leading-2 text-slate-500">&bull;</span>
+          {formatter.format(investmentsAmount)} ₽
+        </span>
+      </p>
     </div>
 
     <hr class="text-gray-200" />
@@ -98,7 +118,7 @@
 
     <p class="flex w-full items-center justify-between text-xs leading-[20px] opacity-70">
       <span>Дневной бюджет</span>
-      <span>{formatter.format(dailyBudget)} ₽</span>
+      <span>~{formatter.format(dailyBudget)} ₽</span>
     </p>
   </div>
 </div>
