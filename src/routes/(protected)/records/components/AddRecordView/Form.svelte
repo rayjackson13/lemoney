@@ -21,7 +21,7 @@
 
   const focusLastRecord = (): void => {
     const input = rowContainer.querySelector(
-      '.AddRecordForm-recordRow:last-child .MoneyInput-root input',
+      '.AddRecordForm-recordRow:last-child .AddRecordForm-amountInput',
     ) as HTMLInputElement | null
 
     if (input) {

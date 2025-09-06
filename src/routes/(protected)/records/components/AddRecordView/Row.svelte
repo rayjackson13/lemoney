@@ -32,7 +32,11 @@
 
   <Autocomplete options={entryTypes} placeholder="Тип" bind:value={record.type} />
 
-  <NumberInput placeholder="0" bind:value={record.amount} />
+  <NumberInput
+    placeholder="0"
+    classes={{ input: 'AddRecordForm-amountInput' }}
+    bind:value={record.amount}
+  />
 
   <input class="Input flex-1" type="text" placeholder="Описание" bind:value={record.description} />
 
@@ -50,6 +54,7 @@
     aria-label="Удалить строку"
     type="button"
     onclick={() => removeRecord(index)}
+    tabindex="-1"
   >
     <i class="fas fa-xmark pt-[1px] text-sm"></i>
   </button>
