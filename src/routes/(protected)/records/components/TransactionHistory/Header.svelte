@@ -1,7 +1,7 @@
 <script lang="ts">
   import Autocomplete from '$components/common/Autocomplete/Autocomplete.svelte'
   import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
-  import MoneyInput from '$components/common/MoneyInput/MoneyInput.svelte'
+  import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
   import { categories } from '$stores/categories'
   import { transactionTypes } from '$stores/transactionTypes'
   import { getOS } from '$utils/platform/getOS'
@@ -20,7 +20,7 @@
   }
   const moneyInputClasses = {
     root: 'w-full h-[28px]!',
-    input: 'Input-small w-full text-left!',
+    input: 'Input-small w-full! text-left!',
     adornment: 'text-xs pt-[1px] pr-[10px]',
   }
 
@@ -98,9 +98,9 @@
 
       <Autocomplete classes={complexInputClasses} options={transactionTypes} placeholder="Тип" />
 
-      <MoneyInput placeholder="Сумма от" value={null} classes={moneyInputClasses} />
+      <NumberInput placeholder="Сумма от" value={null} classes={moneyInputClasses} />
 
-      <MoneyInput placeholder="Сумма до" value={null} classes={moneyInputClasses} />
+      <NumberInput placeholder="Сумма до" value={null} classes={moneyInputClasses} />
     </div>
   {/if}
 </div>

@@ -99,6 +99,10 @@ button {
   box-shadow: inset 0 0 2px rgb(0 0 0 / 10%)
 }
 
+.Input-numeric {
+  @apply w-30 text-right pr-6;
+}
+
 .Teleport-container {
   position: absolute;
   top: 0;
@@ -106,6 +110,18 @@ button {
   z-index: 100;
   margin: 0;
   padding: 0;
+}
+
+.Summary-block {
+  @apply flex flex-col gap-1 px-4 py-2;
+}
+
+.Summary-row {
+  @apply flex items-center justify-between gap-2 text-sm leading-[24px];
+}
+
+.Summary-rowSmall {
+  @apply pl-4 text-xs leading-[20px];
 }
 
 @source inline("AppBackground-desktop md:AppBackground-desktop");

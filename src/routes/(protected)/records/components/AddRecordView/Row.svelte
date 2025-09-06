@@ -1,10 +1,10 @@
 <script lang="ts">
   import Autocomplete from '$components/common/Autocomplete/Autocomplete.svelte'
   import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
-  import MoneyInput from '$components/common/MoneyInput/MoneyInput.svelte'
   import type { Option, Transaction } from '$types/forms'
   import { fly } from 'svelte/transition'
   import { categories } from '$stores/categories'
+  import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
 
   type Props = {
     index: number
@@ -32,7 +32,7 @@
 
   <Autocomplete options={entryTypes} placeholder="Тип" bind:value={record.type} />
 
-  <MoneyInput placeholder="Сумма" bind:value={record.amount} />
+  <NumberInput placeholder="0" bind:value={record.amount} />
 
   <input class="Input flex-1" type="text" placeholder="Описание" bind:value={record.description} />
 
