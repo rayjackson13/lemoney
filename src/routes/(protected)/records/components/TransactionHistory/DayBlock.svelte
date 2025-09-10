@@ -28,7 +28,7 @@
   }
 </script>
 
-<div class="flex flex-col select-none">
+<div class="flex min-w-0 flex-col select-none">
   <div class="px-4 py-1 text-xs leading-[16px] opacity-70">
     {date ? format(date, 'd MMMM', { locale: ru }) : '<дата не указана>'}
   </div>
@@ -42,8 +42,10 @@
     >
       <div class={clsx('h-full w-[2px] rounded bg-red-300', ribbonColor)}></div>
 
-      <div class={clsx('flex h-8 flex-1 flex-col')}>
-        <p class="text-sm leading-[1.2]">{item.description || '<нет описания>'}</p>
+      <div class={clsx('flex h-8 min-w-0 flex-1 flex-col overflow-hidden')}>
+        <p class="overflow-hidden text-sm leading-[1.2] text-ellipsis whitespace-nowrap">
+          {item.description || '<нет описания>'}
+        </p>
 
         <span class="text-xs leading-[1.2] opacity-70">
           {getCategory(item) ?? '<без категории>'}

@@ -1,13 +1,9 @@
 <script lang="ts">
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
+  import { transactions } from '$stores/transactions'
   import type { Transaction } from '$types/forms'
   import { getDaysUntilNextMonth } from '$utils/dates'
 
-  type Props = {
-    transactions: Transaction[]
-  }
-
-  const { transactions }: Props = $props()
   let daysToIncome = $state<number>(10)
   const daysLeft = getDaysUntilNextMonth()
 
@@ -16,7 +12,7 @@
   })
 
   const getSumOfType = (type: Transaction['type']): number =>
-    transactions
+    $transactions
       .filter((tr) => tr.type === type)
       .reduce((total, current) => (total += current.amount ?? 0), 0)
 
@@ -24,13 +20,13 @@
     return totalValue !== 0 ? Math.round((100 * partialValue) / totalValue) : 0
   }
 
-  const totalIncome = getSumOfType('Income')
-  const regularExpenses = getSumOfType('Expense')
-  const mandatoryExpenses = getSumOfType('ExpensePlanned')
-  const savingsAmount = getSumOfType('Savings')
-  const savingsPercentage = getPercentage(savingsAmount, totalIncome)
-  const investmentsAmount = getSumOfType('Investment')
-  const investmentsPercentage = getPercentage(investmentsAmount, totalIncome)
+  const totalIncome = $derived(getSumOfType('Income'))
+  const regularExpenses = $derived(getSumOfType('Expense'))
+  const mandatoryExpenses = $derived(getSumOfType('ExpensePlanned'))
+  const savingsAmount = $derived(getSumOfType('Savings'))
+  const savingsPercentage = $derived(getPercentage(savingsAmount, totalIncome))
+  const investmentsAmount = $derived(getSumOfType('Investment'))
+  const investmentsPercentage = $derived(getPercentage(investmentsAmount, totalIncome))
   const netAmount = $derived(
     totalIncome - (regularExpenses + mandatoryExpenses + savingsAmount + investmentsAmount),
   )
@@ -118,7 +114,7 @@
 
     <p class="flex w-full items-center justify-between text-xs leading-[20px] opacity-70">
       <span>Дневной бюджет</span>
-      <span>~{formatter.format(dailyBudget)} ₽</span>
+      <span>~{formatter.format(dailyBudget > 0 ? dailyBudget : 0)} ₽</span>
     </p>
   </div>
 </div>

@@ -1,17 +1,14 @@
 <script lang="ts">
-  import type { Transaction } from '$types/forms'
+  import { transactions } from '$stores/transactions'
   import { getTotalSum } from '../../helpers/getTotalSum'
+  import { groupTransactionsByDate } from '../../helpers/groupTransactionsByDate'
   import DayBlock from './DayBlock.svelte'
   import Header from './Header.svelte'
 
-  type Props = {
-    transactions: Map<string, Transaction[]>
-  }
-
   let searchValue = $state('')
-  const { transactions }: Props = $props()
-  const flatList = Array.from(transactions.values()).flat()
-  const transactionSum = getTotalSum(flatList)
+  const groupedTransactions = $derived(groupTransactionsByDate($transactions))
+  const flatList = $derived(Array.from(groupedTransactions.values()).flat())
+  const transactionSum = $derived(getTotalSum(flatList))
 
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,
@@ -23,7 +20,7 @@
   <Header bind:searchValue />
 
   <div class="flex flex-1 flex-col gap-2 overflow-auto py-2">
-    {#each Array.from(transactions) as [dateISO, array] (dateISO)}
+    {#each Array.from(groupedTransactions) as [dateISO, array] (dateISO)}
       <DayBlock {dateISO} transactions={array} />
     {/each}
   </div>

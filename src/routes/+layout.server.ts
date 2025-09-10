@@ -17,8 +17,6 @@ const loadUserInfo = async (fetch: FetchFn): Promise<UserInfo | null> => {
 export const load: LayoutServerLoad = async ({ url, fetch }) => {
   const userInfo = await loadUserInfo(fetch)
 
-  console.log(userInfo)
-
   if (!userInfo && url.pathname !== '/login') {
     throw redirect(302, '/login')
   }
