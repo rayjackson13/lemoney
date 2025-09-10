@@ -5,6 +5,7 @@
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
+  import { ajax } from '$utils/ajax'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
@@ -68,7 +69,7 @@
 
     try {
       isSubmitting = true
-      await fetch('/api/transactions', {
+      await ajax('transactions', {
         method: 'POST',
         body: JSON.stringify(validRows),
       })

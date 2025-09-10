@@ -1,5 +1,6 @@
 import { initializeApp, type FirebaseApp, type FirebaseOptions } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, signInWithPopup, type Auth } from 'firebase/auth'
+import { ajax } from './ajax'
 
 const provider = new GoogleAuthProvider()
 
@@ -33,7 +34,7 @@ export class FirebaseController {
     try {
       const { user } = await signInWithPopup(this._auth, provider)
       const token = await user.getIdTokenResult()
-      await fetch('/api/auth/login', {
+      await ajax('auth/login', {
         method: 'POST',
         body: JSON.stringify({ accessToken: token.token }),
         headers: { 'Content-Type': 'application/json' },

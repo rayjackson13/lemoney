@@ -39,7 +39,7 @@
     class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
   >
     <!-- Navigation -->
-    <nav class="AppHeader-navbar h-full rounded-lg px-4 backdrop-blur-xs">
+    <nav class="AppHeader-navbar z-1 h-full rounded-lg px-4 backdrop-blur-xs">
       <ul class="flex h-full items-center gap-4">
         {#each navItems as item (item.path)}
           {@const isCurrent = item.path === page.url.pathname}
