@@ -144,7 +144,7 @@
   />
 
   {#if selectedOption?.ribbon}
-    <span class={clsx('ribbon', selectedOption.ribbon)}></span>
+    <span class={clsx('Ribbon', selectedOption.ribbon)}></span>
   {/if}
 
   <div

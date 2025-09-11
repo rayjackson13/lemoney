@@ -3,7 +3,10 @@
   import { groupTransactionsByCategory } from '../../helpers/groupTransactionsByCategory'
   import Entry from './Entry.svelte'
 
-  const grouped = $derived(groupTransactionsByCategory($transactions))
+  const filtered = $derived(
+    $transactions.filter((item) => item.type && ['Expense', 'ExpensePlanned'].includes(item.type)),
+  )
+  const grouped = $derived(groupTransactionsByCategory(filtered))
 </script>
 
 <div class="Card flex-1">

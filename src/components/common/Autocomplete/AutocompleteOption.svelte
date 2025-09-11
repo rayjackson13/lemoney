@@ -27,7 +27,7 @@
   transition:fly={{ x: 8, duration: 150, delay: index * 30 }}
 >
   {#if option.ribbon}
-    <span class={clsx('ribbon', option.ribbon)}></span>
+    <span class={clsx('Ribbon', option.ribbon)}></span>
   {/if}
   <span>{option.name}</span>
 </button>
@@ -35,14 +35,3 @@
 {#if !option.value}
   <hr class="my-1 text-gray-200" />
 {/if}
-
-<style>
-  .ribbon {
-    height: 16px;
-    position: absolute;
-    left: 8px;
-    width: 2px;
-    top: calc(50% - 8px);
-    border-radius: 2px;
-  }
-</style>

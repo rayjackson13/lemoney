@@ -36,11 +36,12 @@
   {#each transactions as item (item.id)}
     {@const ribbonColor = getTransactionType(item)?.ribbon ?? 'bg-gray-300'}
     {@const sign = item.type === 'Income' ? '+' : '-'}
+    {console.log(item, ribbonColor)}
 
     <div
       class="flex h-10 items-center gap-2 px-4 py-1 transition-colors duration-50 hover:bg-gray-100"
     >
-      <div class={clsx('h-full w-[2px] rounded bg-red-300', ribbonColor)}></div>
+      <div class={clsx('h-full w-[2px] rounded', ribbonColor)}></div>
 
       <div class={clsx('flex h-8 min-w-0 flex-1 flex-col overflow-hidden')}>
         <p class="overflow-hidden text-sm leading-[1.2] text-ellipsis whitespace-nowrap">
