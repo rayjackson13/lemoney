@@ -128,7 +128,9 @@ button {
   height: 16px;
   position: absolute;
   left: 8px;
-  width: 2px;
+  width: 0;
+  border-left-width: 2px;
+  border-left-style: solid;
   top: calc(50% - 8px);
   border-radius: 2px;
 }

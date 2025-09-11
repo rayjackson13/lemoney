@@ -9,10 +9,11 @@
 
   type Props = {
     dateISO: string
+    disableHover?: boolean
     transactions: Transaction[]
   }
 
-  const { dateISO, transactions }: Props = $props()
+  const { dateISO, disableHover, transactions }: Props = $props()
   const date = parseDateFromISOString(dateISO)
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,
@@ -34,16 +35,23 @@
   </div>
 
   {#each transactions as item (item.id)}
-    {@const ribbonColor = getTransactionType(item)?.ribbon ?? 'bg-gray-300'}
+    {@const ribbonColor = getTransactionType(item)?.ribbon ?? '--color-gray-300'}
     {@const sign = item.type === 'Income' ? '+' : '-'}
-    {console.log(item, ribbonColor)}
 
     <div
-      class="flex h-10 items-center gap-2 px-4 py-1 transition-colors duration-50 hover:bg-gray-100"
+      class={clsx(
+        'flex h-10 items-center gap-2 px-4 py-1 transition-colors duration-50',
+        !disableHover && 'hover:bg-gray-100',
+      )}
     >
-      <div class={clsx('h-full w-[2px] rounded', ribbonColor)}></div>
+      <div
+        class={clsx(
+          `h-full w-0 translate-z-0 rounded border-l-2  backface-hidden`,
+          `border-${ribbonColor}`,
+        )}
+      ></div>
 
-      <div class={clsx('flex h-8 min-w-0 flex-1 flex-col overflow-hidden')}>
+      <div class="flex h-8 min-w-0 flex-1 flex-col overflow-hidden">
         <p class="overflow-hidden text-sm leading-[1.2] text-ellipsis whitespace-nowrap">
           {item.description || '<нет описания>'}
         </p>

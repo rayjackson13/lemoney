@@ -1,10 +1,11 @@
 <script lang="ts">
   import Autocomplete from '$components/common/Autocomplete/Autocomplete.svelte'
   import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
-  import type { Option, Transaction } from '$types/forms'
+  import type { Transaction } from '$types/forms'
   import { fly } from 'svelte/transition'
   import { categories } from '$stores/categories'
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
+  import { transactionTypes } from '$stores/transactionTypes'
 
   type Props = {
     index: number
@@ -13,14 +14,6 @@
   }
 
   let { index, record = $bindable(), removeRecord }: Props = $props()
-
-  const entryTypes: Option[] = [
-    { name: 'Расход', value: 'Expense', ribbon: 'bg-red-300' },
-    { name: 'Доход', value: 'Income', ribbon: 'bg-green-300' },
-    { name: 'План', value: 'ExpensePlanned', ribbon: 'bg-red-300' },
-    { name: 'Инвестиции', value: 'Investment', ribbon: 'bg-violet-300' },
-    { name: 'Сбережения', value: 'Savings', ribbon: 'bg-amber-300' },
-  ]
 </script>
 
 <div
@@ -30,7 +23,7 @@
 >
   <DatePicker bind:value={record.date} />
 
-  <Autocomplete options={entryTypes} placeholder="Тип" bind:value={record.type} />
+  <Autocomplete options={transactionTypes} placeholder="Тип" bind:value={record.type} />
 
   <NumberInput
     placeholder="0"
