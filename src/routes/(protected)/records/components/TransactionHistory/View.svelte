@@ -1,12 +1,15 @@
 <script lang="ts">
   import { transactions } from '$stores/transactions'
+  import type { TransactionFilters } from '$types/forms'
+  import { filterTransactions } from '../../helpers/filterTransactions'
   import { getTotalSum } from '../../helpers/getTotalSum'
   import { groupTransactionsByDate } from '../../helpers/groupTransactionsByDate'
   import DayBlock from './DayBlock.svelte'
   import Header from './Header.svelte'
 
-  let searchValue = $state('')
-  const groupedTransactions = $derived(groupTransactionsByDate($transactions))
+  let filters = $state<TransactionFilters>({})
+  const filteredTransactions = $derived(filterTransactions($transactions, filters))
+  const groupedTransactions = $derived(groupTransactionsByDate(filteredTransactions))
   const flatList = $derived(Array.from(groupedTransactions.values()).flat())
   const transactionSum = $derived(getTotalSum(flatList))
 
@@ -17,7 +20,7 @@
 </script>
 
 <div class="Card flex-1">
-  <Header bind:searchValue />
+  <Header bind:filters />
 
   <div class="flex flex-1 flex-col gap-2 overflow-auto py-2">
     {#each Array.from(groupedTransactions) as [dateISO, array] (dateISO)}

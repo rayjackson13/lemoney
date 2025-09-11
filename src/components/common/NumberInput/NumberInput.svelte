@@ -13,7 +13,7 @@
     mode?: 'money' | 'percent' | 'normal'
     onInput?: (v: number | null) => unknown
     placeholder?: string
-    value: number | null
+    value: number | null | undefined
   }
 
   const formatter = new Intl.NumberFormat('ru', {

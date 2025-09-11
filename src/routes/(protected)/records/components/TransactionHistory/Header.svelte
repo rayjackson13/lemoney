@@ -1,16 +1,16 @@
 <script lang="ts">
   import Autocomplete from '$components/common/Autocomplete/Autocomplete.svelte'
-  import DatePicker from '$components/common/DatePicker/DatePicker.svelte'
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
   import { categories } from '$stores/categories'
   import { transactionTypes } from '$stores/transactionTypes'
+  import type { TransactionFilters } from '$types/forms'
   import { getOS } from '$utils/platform/getOS'
   import clsx from 'clsx'
   import { onMount } from 'svelte'
   import { fly, slide } from 'svelte/transition'
 
   type Props = {
-    searchValue: string
+    filters: TransactionFilters
   }
 
   const complexInputClasses = {
@@ -24,7 +24,7 @@
     adornment: 'text-xs pt-[1px] pr-[10px]',
   }
 
-  let { searchValue = $bindable() }: Props = $props()
+  let { filters = $bindable() }: Props = $props()
   let isFiltersOpen = $state(false)
   let searchInputRef: HTMLInputElement
 
@@ -63,14 +63,14 @@
     <div class="relative">
       <input
         bind:this={searchInputRef}
-        bind:value={searchValue}
+        bind:value={filters.query}
         class="Input-small w-36 pr-6!"
         type="text"
         placeholder="Поиск..."
       />
 
       <div class="pointer-events-none absolute top-0 right-2 flex h-full items-center gap-1">
-        {#if !searchValue}
+        {#if !filters.query}
           <span class="Hotkey pt-[2px]" transition:fly={{ x: 8, duration: 150 }}>Ctrl+F</span>
         {/if}
 
@@ -89,18 +89,34 @@
   </div>
 
   {#if isFiltersOpen}
-    <div class="grid w-full grid-cols-3 gap-1" transition:slide={{ duration: 150 }}>
-      <DatePicker classes={complexInputClasses} placeholder="Дата от" />
+    <div class="grid w-full grid-cols-2 gap-1" transition:slide={{ duration: 150 }}>
+      <Autocomplete
+        bind:value={filters.type}
+        classes={complexInputClasses}
+        hasResetOption
+        options={transactionTypes}
+        placeholder="Тип"
+      />
 
-      <DatePicker classes={complexInputClasses} placeholder="Дата до" />
+      <Autocomplete
+        bind:value={filters.category}
+        classes={complexInputClasses}
+        hasResetOption
+        options={$categories}
+        placeholder="Категория"
+      />
 
-      <Autocomplete classes={complexInputClasses} options={$categories} placeholder="Категория" />
+      <NumberInput
+        bind:value={filters.minAmount}
+        classes={moneyInputClasses}
+        placeholder="Сумма от"
+      />
 
-      <Autocomplete classes={complexInputClasses} options={transactionTypes} placeholder="Тип" />
-
-      <NumberInput placeholder="Сумма от" value={null} classes={moneyInputClasses} />
-
-      <NumberInput placeholder="Сумма до" value={null} classes={moneyInputClasses} />
+      <NumberInput
+        bind:value={filters.maxAmount}
+        classes={moneyInputClasses}
+        placeholder="Сумма до"
+      />
     </div>
   {/if}
 </div>

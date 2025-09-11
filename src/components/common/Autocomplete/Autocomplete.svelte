@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
   import type { FormEventHandler } from 'svelte/elements'
   import { fly } from 'svelte/transition'
+  import AutocompleteOption from './AutocompleteOption.svelte'
 
   type Props = {
     classes?: {
@@ -13,12 +14,21 @@
       input?: string
       root?: string
     }
+    hasResetOption?: boolean
     options: Option[]
     placeholder?: string
     value?: string | null
   }
 
-  let { classes, options, placeholder, value = $bindable() }: Props = $props()
+  let {
+    classes,
+    hasResetOption = false,
+    options,
+    placeholder,
+    value = $bindable(),
+  }: Props = $props()
+
+  const allOptions = hasResetOption ? [{ name: 'Все', value: '' }, ...options] : options
 
   const getOptionName = (): Option | null =>
     value ? (options.find((item) => item.value === value) ?? null) : null
@@ -28,7 +38,7 @@
   let inputBox = $state<DOMRect>()
   let isDropdownVisible = $state(false)
   let isContainerVisible = $state(false)
-  let visibleOptions = $state<Option[]>(options)
+  let visibleOptions = $state<Option[]>(allOptions)
   let highlightedIndex = $state<number | null>(null)
   let inputValue = $derived<string>(getOptionName()?.name ?? '')
   let selectedOption = $derived<Option | null>(getOptionName())
@@ -60,6 +70,13 @@
   }
 
   const onSelect = (item: Option): void => {
+    if (!item.value) {
+      value = null
+      inputValue = ''
+      closeDropdown()
+      return
+    }
+
     if (value === item.value) return
 
     value = item.value
@@ -150,36 +167,15 @@
     >
       {#each visibleOptions as option, index (option.value + '-' + isDropdownVisible)}
         {#if isContainerVisible}
-          <button
-            class={clsx(
-              'relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
-              'transition-colors hover:bg-gray-100 active:bg-gray-200',
-              option.value === value && 'bg-slate-200 hover:bg-slate-200 active:bg-slate-200',
-              index === highlightedIndex && 'bg-gray-200',
-            )}
-            onclick={() => onSelect(option)}
-            tabindex="-1"
-            type="button"
-            transition:fly={{ x: 8, duration: 150, delay: index * 30 }}
-          >
-            {#if option.ribbon}
-              <span class={clsx('ribbon', option.ribbon)}></span>
-            {/if}
-            <span>{option.name}</span>
-          </button>
+          <AutocompleteOption
+            isHighlighted={index === highlightedIndex}
+            isSelected={option.value === value}
+            {index}
+            onSelect={() => onSelect(option)}
+            {option}
+          />
         {/if}
       {/each}
     </div>
   {/if}
 </div>
-
-<style>
-  .ribbon {
-    height: 16px;
-    position: absolute;
-    left: 8px;
-    width: 2px;
-    top: calc(50% - 8px);
-    border-radius: 2px;
-  }
-</style>

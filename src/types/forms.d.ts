@@ -24,3 +24,11 @@ export type Transaction = {
 export type TransactionDTO = Transaction & {
   key: string
 }
+
+export type TransactionFilters = Partial<{
+  query: string
+  type: keyof typeof TransactionTypes
+  category: string
+  minAmount: number
+  maxAmount: number
+}>
