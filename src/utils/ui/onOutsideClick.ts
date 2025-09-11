@@ -8,7 +8,14 @@ export const onOutsideClick = (node: HTMLElement, { callback, refs = [] }: Param
     return refs.some((item) => !!item && item.contains(target))
   }
 
-  function handleClick(event: MouseEvent | FocusEvent) {
+  function handleClick(event: MouseEvent) {
+    const target = event.target as Node
+    if (!node.contains(target) && !isRefsContainTarget(target)) {
+      callback()
+    }
+  }
+
+  function handleContextMenu(event: MouseEvent) {
     const target = event.target as Node
     if (!node.contains(target) && !isRefsContainTarget(target)) {
       callback()
@@ -23,6 +30,7 @@ export const onOutsideClick = (node: HTMLElement, { callback, refs = [] }: Param
   }
 
   document.addEventListener('click', handleClick, true)
+  document.addEventListener('contextmenu', handleContextMenu, true)
   node.addEventListener('focusout', handleFocusOut, true)
 
   return {
@@ -31,6 +39,7 @@ export const onOutsideClick = (node: HTMLElement, { callback, refs = [] }: Param
     },
     destroy() {
       document.removeEventListener('click', handleClick, true)
+      document.removeEventListener('contextmenu', handleContextMenu, true)
       node.removeEventListener('focusout', handleFocusOut, true)
     },
   }

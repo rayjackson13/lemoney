@@ -69,7 +69,7 @@
   {#if isOpen}
     <div class="flex flex-col gap-2 py-2" transition:slide={{ duration: 150 }}>
       {#each Array.from(groupedTransactions) as [dateISO, array] (dateISO)}
-        <DayBlock {dateISO} transactions={array} />
+        <DayBlock {dateISO} disableHover transactions={array} />
       {/each}
     </div>
   {/if}

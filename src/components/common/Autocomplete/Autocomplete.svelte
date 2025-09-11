@@ -159,7 +159,7 @@
   {#if isDropdownVisible && !!visibleOptions.length}
     <div
       bind:this={popoverRef}
-      use:teleport={inputBox}
+      use:teleport={{ rect: inputBox }}
       class="z-10 mt-1 max-h-[40vh] min-w-full overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg"
       transition:fly={{ y: -8, duration: 50 }}
       onintrostart={() => (isContainerVisible = true)}

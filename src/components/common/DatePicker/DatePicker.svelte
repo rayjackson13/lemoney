@@ -121,7 +121,7 @@
       class="z-10 mt-1 w-64 overflow-hidden rounded-lg bg-white shadow-lg"
       transition:fly={{ y: -8, duration: 200 }}
       bind:this={popoverRef}
-      use:teleport={inputBox}
+      use:teleport={{ rect: inputBox }}
     >
       <div
         class="flex items-center justify-between border-b-1 border-b-gray-200 bg-neutral-50 px-4 py-2"

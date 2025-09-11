@@ -1,3 +1,10 @@
+import type { Position } from '$types/global'
+
+type Params = {
+  rect?: DOMRect | null
+  position?: Position | null
+}
+
 function createContainer(): HTMLDivElement {
   const container = document.createElement('div')
   container.role = 'presentation'
@@ -7,13 +14,23 @@ function createContainer(): HTMLDivElement {
   return container
 }
 
-export function teleport(node: Node, rect: DOMRect | undefined) {
-  if (!rect) return
+export function teleport(node: Node, { rect, position }: Params) {
+  if (!rect && !position) return
 
   const container = createContainer()
-  container.style.left = `${rect.left}px`
-  container.style.top = `${rect.bottom}px`
-  container.style.minWidth = `${rect.width}px`
+
+  if (position) {
+    container.style.left = `${position.x}px`
+    container.style.top = `${position.y}px`
+    container.style.minWidth = '200px'
+  }
+
+  if (rect) {
+    container.style.left = `${rect.left}px`
+    container.style.top = `${rect.bottom}px`
+    container.style.minWidth = `${rect.width}px`
+  }
+
   container.appendChild(node)
 
   return {

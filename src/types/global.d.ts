@@ -7,3 +7,8 @@ export type SocketData<T> = {
   type: string
   data: T
 }
+
+export type Position = {
+  x: number
+  y: number
+}
