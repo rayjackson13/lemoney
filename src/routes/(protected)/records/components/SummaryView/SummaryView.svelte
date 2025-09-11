@@ -3,6 +3,7 @@
   import { transactions } from '$stores/transactions'
   import type { Transaction } from '$types/forms'
   import { getDaysUntilNextMonth } from '$utils/dates'
+  import clsx from 'clsx'
 
   let daysToIncome = $state<number>(10)
   const daysLeft = getDaysUntilNextMonth()
@@ -33,6 +34,7 @@
 
   const totalDaysLeft = $derived(daysToIncome + daysLeft)
   const dailyBudget = $derived(netAmount / (totalDaysLeft > 0 ? totalDaysLeft : 1))
+  const nextMonthBudget = $derived(dailyBudget > 0 ? daysLeft * dailyBudget : 0)
 </script>
 
 <div class="Card">
@@ -92,7 +94,9 @@
     <div class="Summary-block">
       <p class="Summary-row">
         <span>Остаток дохода</span>
-        <span class="font-medium text-green-600">{formatter.format(netAmount)} ₽</span>
+        <span class={clsx('font-medium', netAmount >= 0 ? 'text-green-600' : 'text-red-600')}>
+          {formatter.format(netAmount)} ₽
+        </span>
       </p>
 
       <p class="Summary-row">
@@ -108,9 +112,11 @@
   </div>
 
   <div class="Card-footer flex-col items-start! gap-0!">
-    <p class="text-xs leading-[20px] opacity-70">
-      Рекомендуется оставить хотя бы 9 162 ₽ на следующий месяц
-    </p>
+    {#if nextMonthBudget > 0}
+      <p class="text-xs leading-[20px] opacity-70">
+        Рекомендуется оставить хотя бы {formatter.format(nextMonthBudget)} ₽ на следующий месяц
+      </p>
+    {/if}
 
     <p class="flex w-full items-center justify-between text-xs leading-[20px] opacity-70">
       <span>Дневной бюджет</span>
