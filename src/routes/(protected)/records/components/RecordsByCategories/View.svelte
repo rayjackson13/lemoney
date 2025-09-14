@@ -15,7 +15,7 @@
   </div>
 
   <div class="flex flex-1 flex-col gap-2 overflow-auto p-2">
-    {#each Array.from(grouped) as [categoryId, list] (categoryId)}
+    {#each grouped as [categoryId, list] (categoryId)}
       <Entry {categoryId} {list} />
     {/each}
   </div>
