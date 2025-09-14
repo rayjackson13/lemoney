@@ -12,6 +12,12 @@ export type Option = {
   ribbon?: string
 }
 
+export type ContextMenuOption = {
+  name: string
+  icon?: string
+  onClick?: () => void
+}
+
 export type Transaction = {
   amount: number | null
   category: string | null

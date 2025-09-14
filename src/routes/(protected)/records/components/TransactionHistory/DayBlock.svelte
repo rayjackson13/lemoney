@@ -2,8 +2,9 @@
   import ContextMenu from '$components/common/ContextMenu/ContextMenu.svelte'
   import { categories } from '$stores/categories'
   import { transactionTypes } from '$stores/transactionTypes'
-  import type { Option, Transaction } from '$types/forms'
+  import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
+  import { ajax } from '$utils/ajax'
   import { parseDateFromISOString } from '$utils/dates'
   import clsx from 'clsx'
   import { format } from 'date-fns'
@@ -17,7 +18,7 @@
 
   const { dateISO, disableHover, transactions }: Props = $props()
   let ctxMenuPosition = $state<Position | null>(null)
-  let highlightId = $state<string | null>(null)
+  let selectedId = $state<string | null>(null)
   const date = parseDateFromISOString(dateISO)
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,
@@ -38,7 +39,7 @@
 
   const closeMenu = () => {
     ctxMenuPosition = null
-    highlightId = null
+    selectedId = null
   }
 
   const onContextMenu = (ev: MouseEvent) => {
@@ -51,12 +52,34 @@
       return
     }
 
-    highlightId = (ev.currentTarget as HTMLElement).getAttribute('data-id')
+    selectedId = (ev.currentTarget as HTMLElement).getAttribute('data-id')
     ctxMenuPosition = {
       x: ev.clientX,
       y: ev.clientY,
     }
   }
+
+  const removeTransaction = async (): Promise<void> => {
+    if (!selectedId) return
+
+    try {
+      await ajax(`transactions/${selectedId}`, { method: 'DELETE' })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const contextMenuOptions: ContextMenuOption[] = [
+    {
+      icon: 'fas fa-pencil',
+      name: 'Изменить',
+    },
+    {
+      icon: 'fas fa-close',
+      name: 'Удалить',
+      onClick: removeTransaction,
+    },
+  ]
 </script>
 
 <div class="flex min-w-0 flex-col select-none">
@@ -72,7 +95,7 @@
       class={clsx(
         'flex h-10 items-center gap-2 px-4 py-1 transition-colors duration-50',
         !disableHover && 'hover:bg-gray-100',
-        highlightId === item.id && 'bg-gray-100',
+        selectedId === item.id && 'bg-gray-100',
       )}
       oncontextmenu={onContextMenu}
       data-id={item.id}
@@ -102,4 +125,9 @@
   {/each}
 </div>
 
-<ContextMenu close={closeMenu} isOpen={!!ctxMenuPosition} mousePosition={ctxMenuPosition} />
+<ContextMenu
+  {closeMenu}
+  isOpen={!!ctxMenuPosition}
+  mousePosition={ctxMenuPosition}
+  options={contextMenuOptions}
+/>
