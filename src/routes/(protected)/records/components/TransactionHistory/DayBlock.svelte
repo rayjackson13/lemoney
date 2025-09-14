@@ -29,7 +29,11 @@
   }
 
   function getCategory(transaction: Transaction): string | null {
-    return $categories.find((cat) => cat.value === transaction.category)?.name ?? null
+    if (transaction.type && ['Expense', 'ExpensePlanned'].includes(transaction.type)) {
+      return $categories.find((cat) => cat.value === transaction.category)?.name ?? null
+    }
+
+    return getTransactionType(transaction)?.name ?? null
   }
 
   const closeMenu = () => {
