@@ -34,7 +34,7 @@
 
   const totalDaysLeft = $derived(daysToIncome + daysLeft)
   const dailyBudget = $derived(netAmount / (totalDaysLeft > 0 ? totalDaysLeft : 1))
-  const nextMonthBudget = $derived(dailyBudget > 0 ? daysLeft * dailyBudget : 0)
+  const nextMonthBudget = $derived(dailyBudget > 0 ? daysToIncome * dailyBudget : 0)
 </script>
 
 <div class="Card">

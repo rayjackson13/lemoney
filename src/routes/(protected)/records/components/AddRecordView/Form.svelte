@@ -32,7 +32,10 @@
   }
 
   const addRecord = async (): Promise<void> => {
-    records.push(getDefaultRecord())
+    const newRecord = getDefaultRecord()
+    const lastRecord = records[records.length - 1]
+    newRecord.date = lastRecord.date
+    records.push(newRecord)
     await tick()
     focusLastRecord()
   }
@@ -115,12 +118,12 @@
   <div class="Card-header items-center justify-between">
     <p class="text-sm leading-[16px] font-medium">Добавить транзакцию</p>
 
-    <div class="flex items-center gap-1">
+    <button class="flex items-center gap-1" type="button" onclick={addRecord}>
       <span class="Hotkey">Alt+N</span>
-      <button class="IconButton" aria-label="Добавить строку" type="button" onclick={addRecord}>
+      <div class="IconButton" aria-label="Добавить строку">
         <i class="fas fa-plus h-4 w-4! text-sm leading-4!"></i>
-      </button>
-    </div>
+      </div>
+    </button>
   </div>
 
   <div
