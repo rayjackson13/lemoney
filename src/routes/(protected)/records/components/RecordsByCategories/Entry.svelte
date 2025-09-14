@@ -5,6 +5,7 @@
   import { groupTransactionsByDate } from '../../helpers/groupTransactionsByDate'
   import DayBlock from '../TransactionHistory/DayBlock.svelte'
   import clsx from 'clsx'
+  import { pluralize } from '$utils/pluralize'
 
   type Props = {
     categoryId: string | null
@@ -50,7 +51,8 @@
       </p>
 
       <span class="text-xs leading-[1.2] opacity-70">
-        {list.length} операций
+        {list.length}
+        {pluralize(list.length, { one: 'операция', few: 'операции', many: 'операций' })}
       </span>
     </div>
 
