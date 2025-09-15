@@ -7,6 +7,7 @@
   import { transactions } from '$stores/transactions'
   import type { SocketData } from '$types/global'
   import type { Transaction } from '$types/forms'
+  import EditTransactionModal from './modals/EditTransactionModal.svelte'
 
   let { data } = $props()
 
@@ -43,3 +44,5 @@
     <SummaryView />
   </div>
 </div>
+
+<EditTransactionModal />

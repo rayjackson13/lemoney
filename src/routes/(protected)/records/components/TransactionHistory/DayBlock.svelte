@@ -1,6 +1,7 @@
 <script lang="ts">
   import ContextMenu from '$components/common/ContextMenu/ContextMenu.svelte'
   import { categories } from '$stores/categories'
+  import { editTransaction } from '$stores/editTransaction'
   import { transactionTypes } from '$stores/transactionTypes'
   import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
@@ -69,10 +70,20 @@
     }
   }
 
+  const onEditTransaction = async (): Promise<void> => {
+    if (!selectedId) return
+
+    const tx = transactions.find((item) => item.id === selectedId)
+    if (!tx) return
+
+    editTransaction.set(tx)
+  }
+
   const contextMenuOptions: ContextMenuOption[] = [
     {
       icon: 'fas fa-pencil',
       name: 'Изменить',
+      onClick: onEditTransaction,
     },
     {
       icon: 'fas fa-close',

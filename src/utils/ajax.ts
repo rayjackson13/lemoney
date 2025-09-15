@@ -16,6 +16,11 @@ export const ajax = async <T>(
     },
   }
   const response = await fetchApi(`${apiUrl}/${url}`, config)
+  const body = await response.json()
 
-  return await response.json()
+  if (!response.ok) {
+    throw new Error(`Error while sending AJAX request.\n${JSON.stringify(body)}`)
+  }
+
+  return body
 }
