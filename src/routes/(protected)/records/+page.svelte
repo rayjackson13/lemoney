@@ -14,8 +14,9 @@
   transactions.set(data.transactions)
 
   onMount(() => {
+    const wsURL = import.meta.env.VITE_WS_URL
     const token = Cookies.get('__session')!
-    const wss = new WebSocket(`ws://localhost:8080/transactions`)
+    const wss = new WebSocket(`${wsURL}/transactions`)
 
     wss.onopen = () => {
       wss.send(JSON.stringify({ type: 'authorize', token }))
