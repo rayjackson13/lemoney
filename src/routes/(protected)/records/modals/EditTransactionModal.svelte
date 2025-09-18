@@ -7,6 +7,7 @@
   import { transactionTypes } from '$stores/transactionTypes'
   import type { Transaction } from '$types/forms'
   import { parseDateFromISOString } from '$utils/dates'
+  import { FirebaseController } from '$utils/firebase'
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
 
@@ -38,7 +39,7 @@
 
     try {
       isSubmitting = true
-      // TODO: update transaction
+      FirebaseController.updateTransaction(transaction.id, transaction)
       closeModal()
     } catch (e) {
       console.error(e)

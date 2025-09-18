@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { transactions } from '$stores/transactions'
+  import { transactionsStore } from '$stores/transactions'
   import { groupTransactionsByCategory } from '../../helpers/groupTransactionsByCategory'
   import Entry from './Entry.svelte'
 
   const filtered = $derived(
-    $transactions.filter((item) => item.type && ['Expense', 'ExpensePlanned'].includes(item.type)),
+    $transactionsStore.filter((item) => item.type && ['Expense', 'ExpensePlanned'].includes(item.type)),
   )
   const grouped = $derived(groupTransactionsByCategory(filtered))
 </script>

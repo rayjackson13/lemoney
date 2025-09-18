@@ -1,6 +1,6 @@
 <script lang="ts">
   import NumberInput from '$components/common/NumberInput/NumberInput.svelte'
-  import { transactions } from '$stores/transactions'
+  import { transactionsStore } from '$stores/transactions'
   import type { Transaction } from '$types/forms'
   import { getDaysUntilNextMonth } from '$utils/dates'
   import clsx from 'clsx'
@@ -13,7 +13,7 @@
   })
 
   const getSumOfType = (type: Transaction['type']): number =>
-    $transactions
+    $transactionsStore
       .filter((tr) => tr.type === type)
       .reduce((total, current) => (total += current.amount ?? 0), 0)
 

@@ -6,10 +6,23 @@ import {
   signInWithPopup,
   signOut,
   type Auth,
+  type User,
 } from 'firebase/auth'
-import { collection, getDocs, getFirestore, type Firestore } from 'firebase/firestore'
+import {
+  collection,
+  CollectionReference,
+  deleteDoc,
+  doc,
+  getFirestore,
+  onSnapshot,
+  updateDoc,
+  writeBatch,
+  type Firestore,
+} from 'firebase/firestore'
 import type { Transaction, TransactionDTO } from '$types/forms'
 import { userStore } from '$stores/user'
+import { transactionsStore } from '$stores/transactions'
+import { browser } from '$app/environment'
 
 const provider = new GoogleAuthProvider()
 
@@ -27,23 +40,31 @@ export class FirebaseController {
   private static _db: Firestore
   static authReady: boolean
 
-  static initialize() {
+  static initialize = () => {
     this._app = initializeApp(config)
     this._auth = getAuth(this._app)
     this._db = getFirestore(this._app)
 
-    onAuthStateChanged(this._auth, (user) => {
-      userStore.set({ isReady: true, user })
-    })
+    if (browser) onAuthStateChanged(this._auth, this.onAuthChanged)
   }
 
-  private static checkAuth(): void {
+  private static onAuthChanged = (user: User | null): void => {
+    userStore.set({ isReady: true, user })
+
+    try {
+      this.watchTransactions()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  private static checkAuth = (): void => {
     if (!this._auth) {
       throw new Error('Attempted to call Firebase Auth before it was initialized.')
     }
   }
 
-  static async authorize(): Promise<void> {
+  static authorize = async (): Promise<void> => {
     this.checkAuth()
 
     try {
@@ -53,7 +74,7 @@ export class FirebaseController {
     }
   }
 
-  static async logout(): Promise<void> {
+  static logout = async (): Promise<void> => {
     this.checkAuth()
 
     try {
@@ -63,25 +84,66 @@ export class FirebaseController {
     }
   }
 
-  static async fetchRecords(): Promise<Transaction[]> {
+  static getTransactionsReference = (): CollectionReference => {
     this.checkAuth()
 
-    try {
-      const snapshot = await getDocs(
-        collection(this._db, 'users/rAmr4zNEx7WJI14s6AGGx24axt83/transactions'),
-      )
-      const transactions = snapshot.docs
+    const userUid = this._auth.currentUser?.uid
+    if (!userUid) throw new Error('User unauthorized')
+
+    const collectionPath = `/users/${userUid}/transactions`
+    return collection(this._db, collectionPath)
+  }
+
+  static watchTransactions = () => {
+    const collectionRef = this.getTransactionsReference()
+
+    onSnapshot(collectionRef, (snapshot) => {
+      const allDocs = snapshot.docs
         .map((doc) => ({
           ...(doc.data() as TransactionDTO),
           id: doc.id,
         }))
         .toSorted((a, b) => a.key.localeCompare(b.key))
 
-      console.log(transactions)
-      return transactions
+      transactionsStore.set(allDocs)
+    })
+  }
+
+  static addTransactions = async (data: Transaction[]) => {
+    const collectionRef = this.getTransactionsReference()
+    const timestamp = new Date().getTime()
+    let batch = writeBatch(this._db)
+    let count = 0
+
+    for (const item of data) {
+      const key = `${timestamp}-${count}`
+      const docRef = doc(collectionRef)
+      batch.set(docRef, { ...item, key })
+      count++
+
+      if (count === 5) {
+        await batch.commit()
+        batch = writeBatch(this._db)
+        count = 0
+      }
+    }
+
+    if (count > 0) {
+      await batch.commit()
+    }
+  }
+
+  static updateTransaction = async (id: string, data: Transaction) => {
+    try {
+      const collectionRef = this.getTransactionsReference()
+      await updateDoc(doc(collectionRef, id), data)
     } catch (e) {
       console.error(e)
-      return []
     }
+  }
+
+  static removeTransaction = async (id: string) => {
+    const collectionRef = this.getTransactionsReference()
+    await deleteDoc(doc(collectionRef, id))
   }
 }

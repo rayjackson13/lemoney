@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { transactions } from '$stores/transactions'
+  import { transactionsStore } from '$stores/transactions'
   import type { TransactionFilters } from '$types/forms'
   import { filterTransactions } from '../../helpers/filterTransactions'
   import { getTotalSum } from '../../helpers/getTotalSum'
@@ -8,7 +8,7 @@
   import Header from './Header.svelte'
 
   let filters = $state<TransactionFilters>({})
-  const filteredTransactions = $derived(filterTransactions($transactions, filters))
+  const filteredTransactions = $derived(filterTransactions($transactionsStore, filters))
   const groupedTransactions = $derived(groupTransactionsByDate(filteredTransactions))
   const flatList = $derived(Array.from(groupedTransactions.values()).flat())
   const transactionSum = $derived(getTotalSum(flatList))

@@ -1,14 +1,9 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import AddExpenseForm from './components/AddRecordView/Form.svelte'
   import SummaryView from './components/SummaryView/SummaryView.svelte'
   import TransactionHistory from './components/TransactionHistory/View.svelte'
   import RecordsByCategories from './components/RecordsByCategories/View.svelte'
   import EditTransactionModal from './modals/EditTransactionModal.svelte'
-
-  onMount(() => {
-    // TODO: load transactions
-  })
 </script>
 
 <svelte:head><title>lemoney | Бюджет</title></svelte:head>
