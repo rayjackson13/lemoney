@@ -51,10 +51,12 @@ export class FirebaseController {
   private static onAuthChanged = (user: User | null): void => {
     userStore.set({ isReady: true, user })
 
-    try {
-      this.watchTransactions()
-    } catch (e) {
-      console.error(e)
+    if (user) {
+      try {
+        this.watchTransactions()
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
