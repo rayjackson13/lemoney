@@ -7,3 +7,8 @@ export type UserInfo = {
 export type PageData = {
   user: UserInfo | null
 }
+
+export type LoginResponse = {
+  message: string
+  token: string
+}

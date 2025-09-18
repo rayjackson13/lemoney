@@ -5,20 +5,27 @@
   import TransactionHistory from './components/TransactionHistory/View.svelte'
   import RecordsByCategories from './components/RecordsByCategories/View.svelte'
   import { transactions } from '$stores/transactions'
-  import type { SocketData } from '$types/global'
   import type { Transaction } from '$types/forms'
   import EditTransactionModal from './modals/EditTransactionModal.svelte'
+  import Cookies from 'js-cookie'
 
   let { data } = $props()
 
   transactions.set(data.transactions)
 
   onMount(() => {
+    const token = Cookies.get('__session')!
     const wss = new WebSocket(`ws://localhost:8080/transactions`)
 
+    wss.onopen = () => {
+      wss.send(JSON.stringify({ type: 'authorize', token }))
+    }
+
     wss.onmessage = (event) => {
-      const msg = JSON.parse(event.data)
-      $transactions = (msg as SocketData<Transaction[]>).data
+      const { type, data } = JSON.parse(event.data)
+      if (type === 'transactions_snapshot') {
+        $transactions = data as Transaction[]
+      }
     }
 
     return () => {

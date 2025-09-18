@@ -1,19 +1,21 @@
 import type { Transaction } from '$types/forms'
 import type { FetchFn } from '$types/global.js'
-import { ajax } from '$utils/ajax.js'
+import { AjaxHandler } from '$utils/ajax.js'
 import { dateToISOString, getDefaultTimePeriod } from '$utils/dates.js'
 
-async function loadTransactions(fetch: FetchFn): Promise<Transaction[]> {
+async function loadTransactions(fetch: FetchFn, token?: string): Promise<Transaction[]> {
+  if (!token) return []
+
   const dateRange = getDefaultTimePeriod()
   const params = new URLSearchParams()
   params.set('dateFrom', dateToISOString(dateRange[0]))
   params.set('dateTo', dateToISOString(dateRange[1]))
 
   try {
-    const { data } = await ajax<{ data: Transaction[] }>(
+    AjaxHandler.setFetchAPI(fetch)
+    AjaxHandler.setToken(token)
+    const { data } = await AjaxHandler.get<{ data: Transaction[] }>(
       `transactions?${params.toString()}`,
-      {},
-      fetch,
     )
     return data
   } catch (e) {
@@ -22,8 +24,9 @@ async function loadTransactions(fetch: FetchFn): Promise<Transaction[]> {
   }
 }
 
-export async function load({ fetch }) {
-  const transactions = await loadTransactions(fetch)
+export async function load({ cookies, fetch }) {
+  const token = cookies.get('__session')
+  const transactions = await loadTransactions(fetch, token)
 
   return {
     transactions,

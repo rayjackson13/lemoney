@@ -48,11 +48,12 @@
   })
 
   const onLoginPressed = async () => {
-    const isSuccessful = await FirebaseController.authorize()
-
-    if (isSuccessful) {
+    try {
+      await FirebaseController.authorize()
       await invalidateAll()
       goto('/records', { replaceState: true })
+    } catch (e) {
+      console.error(e)
     }
   }
 </script>

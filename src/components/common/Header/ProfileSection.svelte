@@ -4,7 +4,8 @@
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { goto, invalidateAll } from '$app/navigation'
   import type { UserInfo } from '$types/user'
-  import { ajax } from '$utils/ajax'
+  import { AjaxHandler } from '$utils/ajax'
+  import Cookies from 'js-cookie'
 
   type Props = {
     user: UserInfo
@@ -23,7 +24,9 @@
 
   const logout = async (): Promise<void> => {
     try {
-      await ajax('auth/logout', { method: 'POST' })
+      await AjaxHandler.post('auth/logout')
+      Cookies.remove('__session')
+      AjaxHandler.removeToken()
       await invalidateAll()
       goto('/login', { replaceState: true })
     } catch (e) {

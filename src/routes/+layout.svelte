@@ -4,9 +4,21 @@
   import Header from '$components/common/Header/index.svelte'
   import { userStore as user } from '$stores/user'
   import { fly } from 'svelte/transition'
+  import { AjaxHandler } from '$utils/ajax'
+  import type { Snippet } from 'svelte'
+  import type { UserInfo } from '$types/user'
 
-  let { children } = $props()
+  type Props = {
+    children: Snippet<[]>
+    data: {
+      token: string
+      user: UserInfo
+    }
+  }
 
+  let { children, data }: Props = $props()
+
+  if (data.token) AjaxHandler.setToken(data.token)
   FirebaseController.initialize()
 </script>
 

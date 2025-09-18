@@ -1,6 +1,8 @@
 import { initializeApp, type FirebaseApp, type FirebaseOptions } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, signInWithPopup, type Auth } from 'firebase/auth'
-import { ajax } from './ajax'
+import { AjaxHandler } from './ajax'
+import type { LoginResponse } from '$types/user'
+import Cookies from 'js-cookie'
 
 const provider = new GoogleAuthProvider()
 
@@ -25,25 +27,25 @@ export class FirebaseController {
     return this._app
   }
 
-  static async authorize(): Promise<boolean> {
+  static async authorize(): Promise<void> {
     if (!this._auth) {
-      console.error('Attempted to call Firebase Auth before it was initialized.')
-      return false
+      throw new Error('Attempted to call Firebase Auth before it was initialized.')
     }
 
     try {
       const { user } = await signInWithPopup(this._auth, provider)
-      const token = await user.getIdTokenResult()
-      await ajax('auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ accessToken: token.token }),
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+      const idToken = await user.getIdTokenResult()
+      const { token } = await AjaxHandler.post<LoginResponse>('auth/login', {
+        accessToken: idToken.token,
       })
-      return true
+
+      AjaxHandler.setToken(token)
+      Cookies.set('__session', token, {
+        sameSite: 'lax',
+        expires: 7,
+      })
     } catch (error) {
-      console.error('Unsuccessful login attempt:', error)
-      return false
+      throw new Error(`Unsuccessful login attempt: ${error}`)
     }
   }
 }

@@ -6,7 +6,7 @@
   import { editTransaction } from '$stores/editTransaction'
   import { transactionTypes } from '$stores/transactionTypes'
   import type { Transaction } from '$types/forms'
-  import { ajax } from '$utils/ajax'
+  import { AjaxHandler } from '$utils/ajax'
   import { parseDateFromISOString } from '$utils/dates'
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
@@ -35,15 +35,11 @@
   const onSubmit = async (ev?: SubmitEvent): Promise<void> => {
     ev?.preventDefault()
 
-    console.log(transaction)
     if (!transaction || !validate(transaction) || isSubmitting) return
 
     try {
       isSubmitting = true
-      await ajax(`transactions/${transaction.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(transaction),
-      })
+      await AjaxHandler.patch(`transactions/${transaction.id}`, transaction)
       closeModal()
     } catch (e) {
       console.error(e)
