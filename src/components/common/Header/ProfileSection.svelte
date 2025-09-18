@@ -2,8 +2,9 @@
   import { clsx } from 'clsx'
   import { fly, slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
-  import { goto, invalidateAll } from '$app/navigation'
+  import { goto } from '$app/navigation'
   import { userStore } from '$stores/user'
+  import { FirebaseController } from '$utils/firebase'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -18,8 +19,7 @@
 
   const logout = async (): Promise<void> => {
     try {
-      // TODO: logout
-      await invalidateAll()
+      FirebaseController.logout()
       goto('/login', { replaceState: true })
     } catch (e) {
       console.error('Could not log out', e)
@@ -52,7 +52,7 @@
 
     <!-- User Menu -->
     {#if isMenuOpen}
-      <aside class="items-center py-2 text-sm" transition:slide={{ duration: 150 }}>
+      <aside class="items-center overflow-hidden py-2 text-sm" transition:slide={{ duration: 150 }}>
         <ul>
           <li in:fly={{ x: -20 }}>
             <a class="flex items-center py-1 hover:bg-neutral-700" href="/help">

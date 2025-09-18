@@ -4,8 +4,8 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signOut,
   type Auth,
-  type User,
 } from 'firebase/auth'
 import { collection, getDocs, getFirestore, type Firestore } from 'firebase/firestore'
 import type { Transaction, TransactionDTO } from '$types/forms'
@@ -37,10 +37,14 @@ export class FirebaseController {
     })
   }
 
-  static async authorize(): Promise<void> {
+  private static checkAuth(): void {
     if (!this._auth) {
       throw new Error('Attempted to call Firebase Auth before it was initialized.')
     }
+  }
+
+  static async authorize(): Promise<void> {
+    this.checkAuth()
 
     try {
       await signInWithPopup(this._auth, provider)
@@ -49,18 +53,18 @@ export class FirebaseController {
     }
   }
 
-  static getCurrentUser(): User | null {
-    if (!this._auth) {
-      throw new Error('Attempted to call Firebase Auth before it was initialized.')
-    }
+  static async logout(): Promise<void> {
+    this.checkAuth()
 
-    return this._auth.currentUser
+    try {
+      await signOut(this._auth)
+    } catch (error) {
+      throw new Error(`Unsuccessful logout attempt: ${error}`)
+    }
   }
 
   static async fetchRecords(): Promise<Transaction[]> {
-    if (!this._auth) {
-      throw new Error('Attempted to call Firestore before it was initialized.')
-    }
+    this.checkAuth()
 
     try {
       const snapshot = await getDocs(
