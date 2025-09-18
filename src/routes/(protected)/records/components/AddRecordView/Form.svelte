@@ -5,7 +5,6 @@
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
-  import { AjaxHandler } from '$utils/ajax'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
@@ -72,7 +71,7 @@
 
     try {
       isSubmitting = true
-      await AjaxHandler.post('transactions', validRows)
+      // TODO: add transaction
       records = [getDefaultRecord()]
     } catch (e) {
       console.error(e)

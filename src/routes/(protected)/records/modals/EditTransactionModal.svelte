@@ -6,7 +6,6 @@
   import { editTransaction } from '$stores/editTransaction'
   import { transactionTypes } from '$stores/transactionTypes'
   import type { Transaction } from '$types/forms'
-  import { AjaxHandler } from '$utils/ajax'
   import { parseDateFromISOString } from '$utils/dates'
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
@@ -39,7 +38,7 @@
 
     try {
       isSubmitting = true
-      await AjaxHandler.patch(`transactions/${transaction.id}`, transaction)
+      // TODO: update transaction
       closeModal()
     } catch (e) {
       console.error(e)

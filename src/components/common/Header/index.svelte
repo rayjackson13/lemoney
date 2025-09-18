@@ -3,14 +3,7 @@
   import type { NavigationItem } from '$types/navigation'
   import { clsx } from 'clsx'
   import TimeBlock from './TimeBlock.svelte'
-  import type { UserInfo } from '$types/user'
   import ProfileSection from './ProfileSection.svelte'
-
-  type Props = {
-    user: UserInfo
-  }
-
-  let { user }: Props = $props()
 
   const navItems: NavigationItem[] = [
     {
@@ -67,7 +60,7 @@
     <!-- /Time Period -->
 
     <!-- Profile -->
-    <ProfileSection {user} />
+    <ProfileSection />
     <!-- /Profile -->
   </div>
 </header>

@@ -1,4 +1,12 @@
-import type { UserInfo } from '$types/user'
+import type { User } from 'firebase/auth'
 import { writable } from 'svelte/store'
 
-export const userStore = writable<UserInfo | null>(null)
+type UserStore = {
+  isReady: boolean
+  user: User | null
+}
+
+export const userStore = writable<UserStore>({
+  isReady: false,
+  user: null,
+})

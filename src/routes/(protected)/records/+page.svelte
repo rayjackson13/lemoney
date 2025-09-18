@@ -4,34 +4,10 @@
   import SummaryView from './components/SummaryView/SummaryView.svelte'
   import TransactionHistory from './components/TransactionHistory/View.svelte'
   import RecordsByCategories from './components/RecordsByCategories/View.svelte'
-  import { transactions } from '$stores/transactions'
-  import type { Transaction } from '$types/forms'
   import EditTransactionModal from './modals/EditTransactionModal.svelte'
-  import Cookies from 'js-cookie'
-
-  let { data } = $props()
-
-  transactions.set(data.transactions)
 
   onMount(() => {
-    const wsURL = import.meta.env.VITE_WS_URL
-    const token = Cookies.get('__session')!
-    const wss = new WebSocket(`${wsURL}/transactions`)
-
-    wss.onopen = () => {
-      wss.send(JSON.stringify({ type: 'authorize', token }))
-    }
-
-    wss.onmessage = (event) => {
-      const { type, data } = JSON.parse(event.data)
-      if (type === 'transactions_snapshot') {
-        $transactions = data as Transaction[]
-      }
-    }
-
-    return () => {
-      wss.close()
-    }
+    // TODO: load transactions
   })
 </script>
 

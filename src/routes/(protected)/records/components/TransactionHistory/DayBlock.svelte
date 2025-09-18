@@ -5,7 +5,6 @@
   import { transactionTypes } from '$stores/transactionTypes'
   import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
-  import { AjaxHandler } from '$utils/ajax'
   import { parseDateFromISOString } from '$utils/dates'
   import clsx from 'clsx'
   import { format } from 'date-fns'
@@ -64,7 +63,7 @@
     if (!selectedId) return
 
     try {
-      await AjaxHandler.delete(`transactions/${selectedId}`)
+      // TODO: delete transaction
     } catch (e) {
       console.error(e)
     }
