@@ -26,7 +26,6 @@ import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
 import Cookies from 'js-cookie'
 import { parseDateFromISOString } from './dates'
-import { goto } from '$app/navigation'
 
 const provider = new GoogleAuthProvider()
 
@@ -62,7 +61,6 @@ export class FirebaseClientController {
 
       userStore.set({ isReady: true, user: null })
       Cookies.remove('session_token')
-      goto('/login')
       return
     }
 

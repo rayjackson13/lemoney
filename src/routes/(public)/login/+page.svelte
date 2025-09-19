@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
   import { FirebaseClientController } from '$utils/FirebaseClientController'
@@ -50,7 +49,6 @@
   const onLoginPressed = async () => {
     try {
       await FirebaseClientController.authorize()
-      // goto('/records', { replaceState: true })
     } catch (e) {
       console.error(e)
     }
@@ -63,8 +61,8 @@
 
 <div class="LoginBackground"></div>
 
-<div class="relative flex h-screen w-screen justify-center">
-  <main
+<div class="relative flex h-screen w-screen justify-center overflow-hidden">
+  <div
     class="flex w-full max-w-[440px] flex-col items-center justify-center overflow-hidden px-4 pt-8 pb-24"
   >
     <div class="flex w-full flex-col items-center justify-center gap-8">
@@ -83,5 +81,5 @@
         </button>
       </div>
     </div>
-  </main>
+  </div>
 </div>

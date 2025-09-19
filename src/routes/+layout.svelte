@@ -16,6 +16,4 @@
   FirebaseClientController.initialize()
 </script>
 
-<main class="h-full w-full">
-  {@render children?.()}
-</main>
+{@render children?.()}

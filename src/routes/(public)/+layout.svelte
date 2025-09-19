@@ -16,4 +16,6 @@
   })
 </script>
 
-{@render children?.()}
+<main class="h-full w-full">
+  {@render children?.()}
+</main>

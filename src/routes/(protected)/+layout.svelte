@@ -20,14 +20,10 @@
       user: data.user,
     })
   }
-
-  $effect(() => {
-    console.log($userStore)
-  })
 </script>
 
 <div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>
-  <Header user={data.user} />
+  <Header />
 </div>
 
 <main class="h-full w-full pt-12">

@@ -19,7 +19,7 @@
 
   const logout = async (): Promise<void> => {
     try {
-      FirebaseClientController.logout()
+      await FirebaseClientController.logout()
       goto('/login', { replaceState: true })
     } catch (e) {
       console.error('Could not log out', e)
