@@ -14,7 +14,6 @@
   }
 
   const { data }: Props = $props()
-  console.log('page render', data)
 
   transactionsStore.set(data.transactions)
 </script>
