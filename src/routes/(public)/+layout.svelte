@@ -4,10 +4,15 @@
 
   let { children } = $props()
 
-  $effect(() => {
+  const handleUserAuth = () => {
+    console.log('handleUserAuth', $userStore)
     if ($userStore.isReady && !!$userStore.user) {
-      goto('/records')
+      goto('/', { replaceState: true })
     }
+  }
+
+  $effect(() => {
+    handleUserAuth()
   })
 </script>
 

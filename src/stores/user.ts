@@ -1,9 +1,9 @@
-import type { User } from 'firebase/auth'
+import type { UserInfo } from 'firebase/auth'
 import { writable } from 'svelte/store'
 
 type UserStore = {
   isReady: boolean
-  user: User | null
+  user: UserInfo | null
 }
 
 export const userStore = writable<UserStore>({

@@ -50,7 +50,7 @@
   const onLoginPressed = async () => {
     try {
       await FirebaseClientController.authorize()
-      goto('/records', { replaceState: true })
+      // goto('/records', { replaceState: true })
     } catch (e) {
       console.error(e)
     }

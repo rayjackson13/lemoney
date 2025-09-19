@@ -18,15 +18,19 @@ import {
   updateDoc,
   writeBatch,
   type Firestore,
+  type Unsubscribe,
 } from 'firebase/firestore'
 import type { Transaction, TransactionDTO } from '$types/forms'
 import { userStore } from '$stores/user'
 import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
+import Cookies from 'js-cookie'
+import { parseDateFromISOString } from './dates'
+import { goto } from '$app/navigation'
 
 const provider = new GoogleAuthProvider()
 
-const config: FirebaseOptions = {
+export const firebaseConfig: FirebaseOptions = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'lemoney-32aae.firebaseapp.com',
   projectId: 'lemoney-32aae',
@@ -39,24 +43,40 @@ export class FirebaseClientController {
   private static _auth: Auth
   private static _db: Firestore
   static authReady: boolean
+  private static _unsubscribeWatcher: Unsubscribe | null = null
 
   static initialize = () => {
-    this._app = initializeApp(config)
+    this._app = initializeApp(firebaseConfig)
     this._auth = getAuth(this._app)
     this._db = getFirestore(this._app)
 
     if (browser) onAuthStateChanged(this._auth, this.onAuthChanged)
   }
 
-  private static onAuthChanged = (user: User | null): void => {
-    userStore.set({ isReady: true, user })
-
-    if (user) {
-      try {
-        this.watchTransactions()
-      } catch (e) {
-        console.error(e)
+  private static onAuthChanged = async (user: User | null): Promise<void> => {
+    if (!user) {
+      if (this._unsubscribeWatcher && typeof this._unsubscribeWatcher === 'function') {
+        this._unsubscribeWatcher()
+        this._unsubscribeWatcher = null
       }
+
+      userStore.set({ isReady: true, user: null })
+      Cookies.remove('session_token')
+      goto('/login')
+      return
+    }
+
+    userStore.set({ isReady: true, user })
+    const { token, expirationTime } = await user.getIdTokenResult()
+    Cookies.set('session_token', token, {
+      path: '/',
+      sameSite: 'strict',
+      expires: parseDateFromISOString(expirationTime) ?? undefined,
+    })
+    try {
+      this.watchTransactions()
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -99,7 +119,7 @@ export class FirebaseClientController {
   static watchTransactions = () => {
     const collectionRef = this.getTransactionsReference()
 
-    onSnapshot(collectionRef, (snapshot) => {
+    this._unsubscribeWatcher = onSnapshot(collectionRef, (snapshot) => {
       const allDocs = snapshot.docs
         .map((doc) => ({
           ...(doc.data() as TransactionDTO),
