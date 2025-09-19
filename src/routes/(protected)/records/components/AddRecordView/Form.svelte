@@ -5,7 +5,7 @@
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
-  import { FirebaseController } from '$utils/firebase'
+  import { FirebaseClientController } from '$utils/FirebaseClientController'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
@@ -72,7 +72,7 @@
 
     try {
       isSubmitting = true
-      FirebaseController.addTransactions(validRows)
+      FirebaseClientController.addTransactions(validRows)
       records = [getDefaultRecord()]
     } catch (e) {
       console.error(e)

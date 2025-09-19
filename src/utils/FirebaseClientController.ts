@@ -34,7 +34,7 @@ const config: FirebaseOptions = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-export class FirebaseController {
+export class FirebaseClientController {
   private static _app: FirebaseApp
   private static _auth: Auth
   private static _db: Firestore

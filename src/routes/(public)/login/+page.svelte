@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation'
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
-  import { FirebaseController } from '$utils/firebase.js'
+  import { FirebaseClientController } from '$utils/FirebaseClientController'
   import { onMount } from 'svelte'
   import { Spring } from 'svelte/motion'
 
@@ -49,7 +49,7 @@
 
   const onLoginPressed = async () => {
     try {
-      await FirebaseController.authorize()
+      await FirebaseClientController.authorize()
       goto('/records', { replaceState: true })
     } catch (e) {
       console.error(e)

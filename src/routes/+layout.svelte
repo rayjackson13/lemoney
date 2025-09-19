@@ -1,6 +1,6 @@
 <script lang="ts">
   import '../app.css'
-  import { FirebaseController } from '$utils/firebase'
+  import { FirebaseClientController } from '$utils/FirebaseClientController'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -9,7 +9,7 @@
 
   let { children }: Props = $props()
 
-  FirebaseController.initialize()
+  FirebaseClientController.initialize()
 </script>
 
 <main class="h-full w-full">

@@ -4,7 +4,7 @@
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { goto } from '$app/navigation'
   import { userStore } from '$stores/user'
-  import { FirebaseController } from '$utils/firebase'
+  import { FirebaseClientController } from '$utils/FirebaseClientController'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -19,7 +19,7 @@
 
   const logout = async (): Promise<void> => {
     try {
-      FirebaseController.logout()
+      FirebaseClientController.logout()
       goto('/login', { replaceState: true })
     } catch (e) {
       console.error('Could not log out', e)
