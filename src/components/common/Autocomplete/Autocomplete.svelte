@@ -84,8 +84,28 @@
     closeDropdown()
   }
 
+  const scrollToOption = (index: number) => {
+    if (!popoverRef) return
+
+    const element = popoverRef.querySelector(`.Autocomplete-option[data-index="${index}"]`)
+    if (!element) return
+
+    const listRect = popoverRef.getBoundingClientRect()
+    const itemRect = element.getBoundingClientRect()
+
+    if (itemRect.top < listRect.top || itemRect.bottom > listRect.bottom) {
+      element.scrollIntoView({ block: 'nearest' })
+    }
+  }
+
   const keyHandler = (ev: KeyboardEvent): void => {
-    if (!isDropdownVisible) return
+    if (!isDropdownVisible) {
+      if (document.activeElement === inputRef && !['Escape', 'Tab'].includes(ev.code)) {
+        openDropdown()
+      }
+
+      return
+    }
 
     if (ev.code === 'Escape' && document.activeElement === inputRef) {
       closeDropdown()
@@ -95,12 +115,14 @@
       highlightedIndex =
         highlightedIndex === null ? 0 : Math.min(highlightedIndex + 1, visibleOptions.length - 1)
       ev.preventDefault()
+      scrollToOption(highlightedIndex)
     }
 
     if (ev.code === 'ArrowUp') {
       highlightedIndex =
         highlightedIndex === null ? visibleOptions.length - 1 : Math.max(highlightedIndex - 1, 0)
       ev.preventDefault()
+      scrollToOption(highlightedIndex)
     }
 
     if (ev.code === 'Enter' && highlightedIndex !== null) {
@@ -112,6 +134,10 @@
   function onWindowResize() {
     closeDropdown()
   }
+
+  $effect(() => {
+    console.log('isDropdownVisible', isDropdownVisible)
+  })
 
   onMount(() => {
     document.addEventListener('keydown', keyHandler)

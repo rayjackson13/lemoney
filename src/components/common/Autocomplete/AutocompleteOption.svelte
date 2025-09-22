@@ -16,14 +16,15 @@
 
 <button
   class={clsx(
-    'relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
-    'transition-colors hover:bg-gray-100 active:bg-gray-200',
+    'Autocomplete-option relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
+    'hover:bg-gray-100 active:bg-gray-200',
     isSelected && 'bg-slate-200 hover:bg-slate-200 active:bg-slate-200',
     isHighlighted && 'bg-gray-200',
   )}
   onclick={onSelect}
   tabindex="-1"
   type="button"
+  data-index={index}
   transition:fly={{ x: 8, duration: 150, delay: index * 30 }}
 >
   {#if option.ribbon}
