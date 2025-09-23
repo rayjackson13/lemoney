@@ -31,7 +31,7 @@
   <span class="flex gap-1">
     <NumberInput
       bind:value={percentValue}
-      maxLength={3}
+      maxValue={999}
       mode="percent"
       classes={{ input: 'h-6! w-auto! min-w-16 field-sizing-content' }}
       onInput={onPercentInput}
@@ -40,7 +40,7 @@
     <NumberInput
       bind:value
       mode="money"
-      maxLength={6}
+      maxValue={999_999}
       classes={{ input: 'h-6! w-24!' }}
       onInput={onValueInput}
       placeholder="0"

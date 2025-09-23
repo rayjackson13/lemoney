@@ -28,6 +28,7 @@
   <NumberInput
     placeholder="0"
     classes={{ input: 'AddRecordForm-amountInput' }}
+    maxValue={999_999_999}
     bind:value={record.amount}
   />
 

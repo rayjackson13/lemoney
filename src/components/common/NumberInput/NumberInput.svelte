@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { evaluateNumString } from '$utils/numbers'
   import clsx from 'clsx'
-  import { maska } from 'maska/svelte'
-  import type { MaskInputOptions } from 'maska'
+  import type { FormEventHandler } from 'svelte/elements'
 
   type Props = {
     classes?: {
@@ -9,50 +9,62 @@
       input?: string
       root?: string
     }
-    maxLength?: number
+    maxValue?: number
     mode?: 'money' | 'percent' | 'normal'
     onInput?: (v: number | null) => unknown
     placeholder?: string
     value: number | null | undefined
   }
 
-  const formatter = new Intl.NumberFormat('ru', {
-    maximumFractionDigits: 0,
-  })
-
   let {
     classes,
     placeholder,
     onInput,
-    maxLength,
+    maxValue,
     mode = 'money',
     value = $bindable(),
   }: Props = $props()
-  let inputValue = $derived.by(() => {
-    if (!value) return ''
 
-    return mode === 'money' ? formatter.format(value) : String(value)
-  })
+  const getInputValue = (): string => (!value ? '' : String(value))
+
+  let error = $state<string | null>(null)
+  let inputValue = $state(getInputValue())
   let inputRef: HTMLInputElement
 
-  const maskOptions: MaskInputOptions = {
-    mask: mode === 'percent' ? '' : '#########',
-    number: {
-      locale: 'ru',
-      fraction: 0,
-      unsigned: true,
-    },
-    onMaska: ({ unmasked }) => {
-      value = unmasked ? Number(unmasked) : 0
-      if (onInput && typeof onInput === 'function') onInput(value)
-    },
-    preProcess: (text) => {
-      return maxLength ? text.replace(/\s+/g, '').slice(0, maxLength) : text
-    },
+  const handleBeforeInput = (ev: InputEvent) => {
+    const allowedChars = /^[\d+-]+$/
+    const char = ev.data
+
+    if (!char) return
+
+    if (!allowedChars.test(char)) {
+      ev.preventDefault()
+    }
   }
 
-  const onFocus = () => {
+  const handleInput: FormEventHandler<HTMLInputElement> = (ev) => {
+    const text = ev.currentTarget.value
+
+    try {
+      error = null
+      const result = evaluateNumString(text, maxValue)
+      value = result
+
+      if (typeof onInput === 'function') {
+        onInput(value)
+      }
+    } catch (e) {
+      console.error(e)
+      error = (e as Error).message
+    }
+  }
+
+  const handleFocus = () => {
     inputRef?.select()
+  }
+
+  const handleBlur = () => {
+    inputValue = getInputValue()
   }
 </script>
 
@@ -60,9 +72,16 @@
   <input
     bind:this={inputRef}
     bind:value={inputValue}
-    use:maska={maskOptions}
-    onfocus={onFocus}
-    class={clsx('Input Input-numeric', mode === 'normal' && 'pr-2!', classes?.input)}
+    onfocus={handleFocus}
+    onblur={handleBlur}
+    oninput={handleInput}
+    onbeforeinput={handleBeforeInput}
+    class={clsx(
+      'Input Input-numeric',
+      mode === 'normal' && 'pr-2!',
+      !!error && 'outline-red-800!',
+      classes?.input,
+    )}
     type="text"
     inputmode="numeric"
     {placeholder}

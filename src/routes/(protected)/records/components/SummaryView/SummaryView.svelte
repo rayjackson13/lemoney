@@ -103,6 +103,7 @@
         <span>Дней до следующего дохода</span>
         <NumberInput
           bind:value={daysToIncome}
+          maxValue={99}
           mode="normal"
           classes={{ input: 'h-6! w-auto! min-w-12 field-sizing-content' }}
           placeholder="0"
