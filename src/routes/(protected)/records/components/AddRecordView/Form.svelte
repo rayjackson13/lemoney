@@ -74,6 +74,9 @@
       isSubmitting = true
       FirebaseClientController.addTransactions(validRows)
       records = [getDefaultRecord()]
+      queueMicrotask(() => {
+        focusLastRecord()
+      })
     } catch (e) {
       console.error(e)
     } finally {

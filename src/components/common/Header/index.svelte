@@ -19,6 +19,10 @@
       label: 'Планирование',
     },
     {
+      path: '/goals',
+      label: 'Цели',
+    },
+    {
       path: '/settings',
       label: 'Настройки',
       icon: 'fas fa-cog',
@@ -31,7 +35,6 @@
   <div
     class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
   >
-    <!-- Navigation -->
     <nav class="AppHeader-navbar z-1 h-full rounded-lg px-4 backdrop-blur-xs">
       <ul class="flex h-full items-center gap-4">
         {#each navItems as item (item.path)}
@@ -53,15 +56,10 @@
         {/each}
       </ul>
     </nav>
-    <!-- /Navigation -->
 
-    <!-- Time Period -->
     <TimeBlock />
-    <!-- /Time Period -->
 
-    <!-- Profile -->
     <ProfileSection />
-    <!-- /Profile -->
   </div>
 </header>
 
