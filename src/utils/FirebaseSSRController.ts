@@ -12,7 +12,7 @@ import { firebaseConfig } from './FirebaseClientController'
 import type { Transaction, TransactionDTO } from '$types/forms'
 import { dateToISOString, getDefaultTimePeriod } from './dates'
 
-const waitForUserState = async (auth: Auth, timeoutMs = 2000): Promise<User | null> => {
+const waitForUserState = async (auth: Auth): Promise<User | null> => {
   let unsubscribe: Unsubscribe
 
   if (auth.currentUser) {
@@ -20,13 +20,7 @@ const waitForUserState = async (auth: Auth, timeoutMs = 2000): Promise<User | nu
   }
 
   return new Promise((resolve) => {
-    const timeout = setTimeout(() => {
-      unsubscribe()
-      resolve(null)
-    }, timeoutMs)
-
     unsubscribe = onAuthStateChanged(auth, (user) => {
-      clearTimeout(timeout)
       unsubscribe()
       resolve(user)
     })
@@ -85,31 +79,5 @@ export class FirebaseSSRController {
         id: doc.id,
       }))
       .toSorted((a, b) => a.key.localeCompare(b.key))
-  }
-
-  static waitForUserState = async (auth: Auth, timeoutMs = 2000): Promise<User | null> => {
-    if (!this._auth) {
-      console.error('SSR: Attempted to call Firebase Auth before it was initialized.')
-      return null
-    }
-
-    if (auth.currentUser) {
-      return auth.currentUser
-    }
-
-    let unsubscribe: Unsubscribe
-
-    return new Promise((resolve) => {
-      const timeout = setTimeout(() => {
-        unsubscribe()
-        resolve(null)
-      }, timeoutMs)
-
-      unsubscribe = onAuthStateChanged(auth, (user) => {
-        clearTimeout(timeout)
-        unsubscribe()
-        resolve(user)
-      })
-    })
   }
 }
