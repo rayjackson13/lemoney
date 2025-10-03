@@ -7,9 +7,10 @@ import {
   type User,
   type UserInfo,
 } from 'firebase/auth'
-import { collection, getDocs, getFirestore, type Firestore } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, query, where, type Firestore } from 'firebase/firestore'
 import { firebaseConfig } from './FirebaseClientController'
 import type { Transaction, TransactionDTO } from '$types/forms'
+import { dateToISOString, getDefaultTimePeriod } from './dates'
 
 const waitForUserState = async (auth: Auth, timeoutMs = 2000): Promise<User | null> => {
   let unsubscribe: Unsubscribe
@@ -71,7 +72,13 @@ export class FirebaseSSRController {
 
     const db = getFirestore(this._app)
     const collectionPath = `/users/${user.uid}/transactions`
-    const docs = (await getDocs(collection(db, collectionPath))).docs
+    const dates = getDefaultTimePeriod()
+    const collectionQuery = query(
+      collection(db, collectionPath),
+      where('date', '>=', dateToISOString(dates[0])),
+      where('date', '<=', dateToISOString(dates[1])),
+    )
+    const docs = (await getDocs(collectionQuery)).docs
     return docs
       .map((doc) => ({
         ...(doc.data() as TransactionDTO),
