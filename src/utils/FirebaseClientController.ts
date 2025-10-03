@@ -1,8 +1,10 @@
 import { initializeApp, type FirebaseApp, type FirebaseOptions } from 'firebase/app'
 import {
+  browserLocalPersistence,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  setPersistence,
   signInWithPopup,
   signOut,
   type Auth,
@@ -15,7 +17,10 @@ import {
   doc,
   getFirestore,
   onSnapshot,
+  Query,
+  query,
   updateDoc,
+  where,
   writeBatch,
   type Firestore,
   type Unsubscribe,
@@ -25,7 +30,7 @@ import { userStore } from '$stores/user'
 import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
 import Cookies from 'js-cookie'
-import { parseDateFromISOString } from './dates'
+import { dateToISOString, parseDateFromISOString } from './dates'
 
 const provider = new GoogleAuthProvider()
 
@@ -41,7 +46,6 @@ export class FirebaseClientController {
   private static _app: FirebaseApp
   private static _auth: Auth
   private static _db: Firestore
-  static authReady: boolean
   private static _unsubscribeWatcher: Unsubscribe | null = null
 
   static initialize = () => {
@@ -71,11 +75,17 @@ export class FirebaseClientController {
       sameSite: 'strict',
       expires: parseDateFromISOString(expirationTime) ?? undefined,
     })
-    try {
-      this.watchTransactions()
-    } catch (e) {
-      console.error(e)
-    }
+  }
+
+  static waitForAuth = async (): Promise<User | null> => {
+    if (this._auth.currentUser) return Promise.resolve(this._auth.currentUser)
+
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(this._auth, (user) => {
+        unsubscribe()
+        resolve(user)
+      })
+    })
   }
 
   private static checkAuth = (): void => {
@@ -88,6 +98,7 @@ export class FirebaseClientController {
     this.checkAuth()
 
     try {
+      await setPersistence(this._auth, browserLocalPersistence)
       await signInWithPopup(this._auth, provider)
     } catch (error) {
       throw new Error(`Unsuccessful login attempt: ${error}`)
@@ -114,8 +125,15 @@ export class FirebaseClientController {
     return collection(this._db, collectionPath)
   }
 
-  static watchTransactions = () => {
-    const collectionRef = this.getTransactionsReference()
+  static getTransactionsQuery = (dates: [Date, Date]): Query =>
+    query(
+      this.getTransactionsReference(),
+      where('date', '>=', dateToISOString(dates[0])),
+      where('date', '<=', dateToISOString(dates[1])),
+    )
+
+  static watchTransactions = (dates: [Date, Date]) => {
+    const collectionRef = this.getTransactionsQuery(dates)
 
     this._unsubscribeWatcher = onSnapshot(collectionRef, (snapshot) => {
       const allDocs = snapshot.docs
@@ -127,6 +145,8 @@ export class FirebaseClientController {
 
       transactionsStore.set(allDocs)
     })
+
+    return this._unsubscribeWatcher
   }
 
   static addTransactions = async (data: Transaction[]) => {

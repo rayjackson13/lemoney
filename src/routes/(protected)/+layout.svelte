@@ -2,8 +2,10 @@
   import Header from '$components/common/Header/index.svelte'
   import { fly } from 'svelte/transition'
   import { type Snippet } from 'svelte'
-  import type { UserInfo } from 'firebase/auth'
+  import { type UserInfo } from 'firebase/auth'
   import { userStore } from '$stores/user'
+  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { timePeriod } from '$stores/timePeriod'
 
   type Props = {
     children: Snippet<[]>
@@ -20,6 +22,21 @@
       user: data.user,
     })
   }
+
+  let unsubscribe: () => void
+
+  const watchTransactions = async (dates: [Date, Date]) => {
+    await FirebaseClientController.waitForAuth()
+    unsubscribe = FirebaseClientController.watchTransactions(dates)
+  }
+
+  $effect(() => {
+    watchTransactions($timePeriod)
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
+  })
 </script>
 
 <div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>

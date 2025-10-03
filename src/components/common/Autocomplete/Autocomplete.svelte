@@ -135,10 +135,6 @@
     closeDropdown()
   }
 
-  $effect(() => {
-    console.log('isDropdownVisible', isDropdownVisible)
-  })
-
   onMount(() => {
     document.addEventListener('keydown', keyHandler)
     window.addEventListener('resize', onWindowResize)
