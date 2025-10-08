@@ -31,6 +31,7 @@ import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
 import Cookies from 'js-cookie'
 import { dateToISOString } from './dates'
+import { addDays } from 'date-fns'
 
 const provider = new GoogleAuthProvider()
 
@@ -73,6 +74,7 @@ export class FirebaseClientController {
     Cookies.set('session_token', token, {
       path: '/',
       sameSite: 'strict',
+      expires: addDays(new Date(), 30),
     })
   }
 
