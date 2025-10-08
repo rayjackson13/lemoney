@@ -30,7 +30,7 @@ import { userStore } from '$stores/user'
 import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
 import Cookies from 'js-cookie'
-import { dateToISOString, parseDateFromISOString } from './dates'
+import { dateToISOString } from './dates'
 
 const provider = new GoogleAuthProvider()
 
@@ -69,11 +69,10 @@ export class FirebaseClientController {
     }
 
     userStore.set({ isReady: true, user })
-    const { token, expirationTime } = await user.getIdTokenResult()
+    const { token } = await user.getIdTokenResult()
     Cookies.set('session_token', token, {
       path: '/',
       sameSite: 'strict',
-      expires: parseDateFromISOString(expirationTime) ?? undefined,
     })
   }
 
