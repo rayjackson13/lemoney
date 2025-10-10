@@ -40,7 +40,6 @@
     logoAnim.precision = 0.1
     await Promise.allSettled([logoAnim.set({ opacity: 0, scale: 2 }), bgAnim.set({ opacity: 0 })])
     isVisible = false
-    console.log('resolving animation took:', (performance.now() - startTime).toFixed(2), 'ms')
   }
 
   $effect.pre(() => {
