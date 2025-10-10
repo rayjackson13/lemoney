@@ -1,22 +1,21 @@
 @import 'tailwindcss';
 @import '@fortawesome/fontawesome-free/css/all.css';
 
-:root {
-  /* dimensions */
+/* :root {
   --header-height: 0;
   --mobile-navbar-height: 76px;
-  /* letter-spacing */
   --tracking-tightest: -0.0005em;
-}
+  --screen-xl: "width >= 80rem"
+} */
 
-@media (width >=80rem) {
+/* @media (width >=80rem) {
   :root {
     --header-height: 48px;
     --mobile-navbar-height: 0;
   }
-}
+} */
 
-html,
+/* html,
 body {
   font-family: 'Inter', sans-serif;
   color: var(--color-gray-900);
@@ -26,9 +25,9 @@ body {
   font-size: 16px;
   overflow: hidden;
   min-width: 375px;
-}
+} */
 
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -41,7 +40,7 @@ button {
 .App-main {
   padding-top: var(--header-height);
   padding-bottom: var(--mobile-navbar-height);
-}
+} */
 
 .LoginBackground {
   @apply absolute top-0 left-0 h-full w-full bg-cover bg-center;
@@ -120,14 +119,14 @@ button {
   @apply w-30 text-right pr-6;
 }
 
-.Teleport-container {
+/* .Teleport-container {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 100;
   margin: 0;
   padding: 0;
-}
+} */
 
 .Summary-block {
   @apply flex flex-col gap-1 px-4 py-2;
@@ -141,7 +140,7 @@ button {
   @apply pl-4 text-xs leading-[20px];
 }
 
-.Ribbon {
+/* .Ribbon {
   height: 16px;
   position: absolute;
   left: 8px;
@@ -150,12 +149,18 @@ button {
   border-left-style: solid;
   top: calc(50% - 8px);
   border-radius: 2px;
-}
+} */
 
 .Modal-backdrop {
   background-color: rgb(0 0 0 / 25%);
   @apply fixed top-0 left-0 w-screen h-screen z-99 backdrop-blur-xs;
   @apply flex items-center justify-center;
 }
+
+/* .section-shadow {
+  box-shadow:
+    0 -2px 16px rgb(0 0 0 / 4%),
+    0 4px 16px rgb(0 0 0 / 8%);
+} */
 
 @source inline("AppBackground-desktop md:AppBackground-desktop");

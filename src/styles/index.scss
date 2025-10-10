@@ -1,0 +1,69 @@
+@use "theme" as *;
+
+:root {
+  /* dimensions */
+  --header-height: 0;
+  --mobile-navbar-height: 76px;
+  /* letter-spacing */
+  --tracking-tightest: -0.0005em;
+}
+
+@include screen(xl) {
+  :root {
+    --header-height: 48px;
+    --mobile-navbar-height: 0;
+  }
+}
+
+html,
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--color-gray-900);
+  background-color: #F9FAFB;
+  min-height: 100svh;
+  height: 100%;
+  font-size: 16px;
+  overflow: hidden;
+  min-width: 375px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+.App-main {
+  padding-top: var(--header-height);
+  padding-bottom: var(--mobile-navbar-height);
+}
+
+.Teleport-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  margin: 0;
+  padding: 0;
+}
+
+.Ribbon {
+  height: 16px;
+  position: absolute;
+  left: 8px;
+  width: 0;
+  border-left-width: 2px;
+  border-left-style: solid;
+  top: calc(50% - 8px);
+  border-radius: 2px;
+}
+
+.section-shadow {
+  box-shadow:
+    0 -2px 16px rgb(0 0 0 / 4%),
+    0 4px 16px rgb(0 0 0 / 8%);
+}

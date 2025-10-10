@@ -1,11 +1,5 @@
 @import 'tailwindcss';
 
-.section-shadow {
-  box-shadow:
-    0 -2px 16px rgb(0 0 0 / 4%),
-    0 4px 16px rgb(0 0 0 / 8%);
-}
-
 .Navbar {
   height: var(--mobile-navbar-height);
 }

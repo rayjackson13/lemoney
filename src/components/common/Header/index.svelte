@@ -35,7 +35,7 @@
   <div
     class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
   >
-    <nav class="AppHeader-navbar z-1 h-full rounded-lg px-4 backdrop-blur-xs">
+    <nav class="AppHeader-navbar z-1 backdrop-blur-xs h-full rounded-lg px-4">
       <ul class="flex h-full items-center gap-4">
         {#each navItems as item (item.path)}
           {@const isCurrent = item.path === page.url.pathname}
@@ -43,7 +43,7 @@
           <li class="h-full">
             <a
               class={clsx(
-                'flex h-full items-center  transition-colors select-none hover:text-white',
+                'flex h-full select-none  items-center transition-colors hover:text-white',
                 isCurrent && 'pointer-events-none font-semibold text-white',
               )}
               href={item.path}
@@ -71,7 +71,7 @@
     background-repeat: repeat-x;
   }
 
-  :global(.AppHeader-navbar, .AppHeader-userMenu, .AppHeader-timeBlock) {
+  :global(.AppHeader-navbar, .AppHeader-userMenu) {
     background-color: rgb(0 0 0 / 50%);
   }
 

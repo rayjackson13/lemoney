@@ -1,5 +1,6 @@
 <script lang="ts">
-  import '../app.css'
+  import '../tw.css'
+  import '../styles/index.scss'
   import { FirebaseController } from '$utils/FirebaseController'
   import type { Snippet } from 'svelte'
 

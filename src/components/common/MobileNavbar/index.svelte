@@ -46,7 +46,7 @@
 {#if user}
   <div
     class={clsx(
-      'pointer-events-none fixed top-0 right-0 bottom-0 left-0 z-1 transition-all xl:hidden',
+      'pointer-events-none fixed top-0 right-0 bottom-0 left-0 z-1 transition-all',
       isMenuOpen && 'Navbar-backdropVisible backdrop-blur-xs',
     )}
   >

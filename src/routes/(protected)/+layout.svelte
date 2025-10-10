@@ -9,13 +9,15 @@
   import SplashScreen from '$components/common/SplashScreen/SplashScreen.svelte'
   import { appReady } from '$stores/appReady'
   import MobileNavbar from '$components/common/MobileNavbar/index.svelte'
+  import TimeBlock from '$components/common/Header/TimeBlock.svelte'
+  import { useMediaQuery } from '$utils/hooks/useMediaQuery'
 
   type Props = {
     children: Snippet<[]>
   }
 
+  const isDesktop = useMediaQuery('xl')
   let { children }: Props = $props()
-
   let unsubscribe: () => void
 
   $effect(() => {
@@ -35,9 +37,15 @@
   })
 </script>
 
-<div class="absolute top-0 left-0 hidden w-full xl:block" transition:fly={{ y: -48 }}>
-  <Header />
-</div>
+{#if $isDesktop}
+  <div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>
+    <Header />
+  </div>
+{/if}
+
+{#if !$isDesktop}
+  <TimeBlock />
+{/if}
 
 <main class="App-main h-full w-full xl:pt-12">
   <div class="relative mx-auto flex h-full w-full max-w-[1400px] px-4 py-4 xl:py-8">
@@ -45,6 +53,8 @@
   </div>
 </main>
 
-<MobileNavbar />
+{#if !$isDesktop}
+  <MobileNavbar />
+{/if}
 
 <SplashScreen />

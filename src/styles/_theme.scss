@@ -1,0 +1,14 @@
+$breakpoints: (
+  xs: '(width < 40rem)',
+  sm: '(width >= 40rem)',
+  md: '(width >= 48rem)',
+  lg: '(width >= 64rem)',
+  xl: '(width >= 80rem)',
+  '2xl': '(width >= 96rem)',
+);
+
+@mixin screen($size) {
+  @media (map-get($breakpoints, $size)) {
+    @content;
+  }
+}
