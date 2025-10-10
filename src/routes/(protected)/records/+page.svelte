@@ -4,24 +4,39 @@
   import TransactionHistory from './components/TransactionHistory/View.svelte'
   import RecordsByCategories from './components/RecordsByCategories/View.svelte'
   import EditTransactionModal from './modals/EditTransactionModal.svelte'
+  import { useMediaQuery } from '$utils/hooks/useMediaQuery'
+
+  const isDesktop = useMediaQuery('lg')
 </script>
 
 <svelte:head><title>lemoney | Бюджет</title></svelte:head>
 
-<div class="flex flex-1 gap-4">
-  <div class="flex flex-1 flex-col gap-4">
-    <AddExpenseForm />
+{#if $isDesktop}
+  <div class="flex flex-1 gap-4">
+    <div class="flex flex-1 flex-col gap-4">
+      <AddExpenseForm />
 
-    <div class="flex min-h-0 flex-1 gap-4">
-      <TransactionHistory />
+      <div class="flex min-h-0 flex-1 gap-4">
+        <TransactionHistory />
 
-      <RecordsByCategories />
+        <RecordsByCategories />
+      </div>
+    </div>
+
+    <div class="w-105 flex flex-col gap-4">
+      <SummaryView />
     </div>
   </div>
+{/if}
 
-  <div class="flex w-105 flex-col gap-4">
+{#if !$isDesktop}
+  <div class="flex flex-1 flex-col gap-4 overflow-scroll">
     <SummaryView />
+
+    <RecordsByCategories />
+
+    <TransactionHistory />
   </div>
-</div>
+{/if}
 
 <EditTransactionModal />

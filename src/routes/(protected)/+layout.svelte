@@ -38,7 +38,7 @@
 </script>
 
 {#if $isDesktop}
-  <div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>
+  <div class="absolute left-0 top-0 w-full" transition:fly={{ y: -48 }}>
     <Header />
   </div>
 {/if}
@@ -48,7 +48,7 @@
 {/if}
 
 <main class="App-main h-full w-full xl:pt-12">
-  <div class="relative mx-auto flex h-full w-full max-w-[1400px] px-4 py-4 xl:py-8">
+  <div class="relative mx-auto flex h-full w-full max-w-[1400px] py-4 xl:px-4 xl:py-8">
     {@render children?.()}
   </div>
 </main>

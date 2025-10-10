@@ -125,7 +125,7 @@
       background-color 0.15s;
 
     @include screen(xl) {
-      color: var(--color-gray-900);
+      color: var(--color-gray-200);
       height: 32px;
       width: 32px;
     }
@@ -138,8 +138,14 @@
   }
 
   .TimeBlock-button:active {
-    background-color: var(--color-neutral-200);
-    color: var(--color-slate-700);
+    @include screen(mobile) {
+      background-color: var(--color-neutral-200);
+      color: var(--color-slate-700);
+    }
+
+    @include screen(xl) {
+      opacity: 0.7;
+    }
   }
 
   .TimeBlock-button[disabled] {
