@@ -76,7 +76,7 @@
         <Logo class="h-[56px] w-[194px] text-zinc-50 lg:h-[72px] lg:w-[250px]" />
       </div>
 
-      <div style={quotesStyle}>
+      <div style={quotesStyle} class="w-full">
         <QuoteView quote={data.quote} />
       </div>
 

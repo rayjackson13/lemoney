@@ -8,6 +8,7 @@
   import { goto } from '$app/navigation'
   import SplashScreen from '$components/common/SplashScreen/SplashScreen.svelte'
   import { appReady } from '$stores/appReady'
+  import MobileNavbar from '$components/common/MobileNavbar/index.svelte'
 
   type Props = {
     children: Snippet<[]>
@@ -34,14 +35,16 @@
   })
 </script>
 
-<div class="absolute top-0 left-0 w-full" transition:fly={{ y: -48 }}>
+<div class="absolute top-0 left-0 hidden w-full xl:block" transition:fly={{ y: -48 }}>
   <Header />
 </div>
 
-<main class="h-full w-full pt-12">
+<main class="h-full w-full xl:pt-12">
   <div class="relative mx-auto flex h-full w-full max-w-[1400px] px-4 py-8">
     {@render children?.()}
   </div>
 </main>
+
+<MobileNavbar />
 
 <SplashScreen />

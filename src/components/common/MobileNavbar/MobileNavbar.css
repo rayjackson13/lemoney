@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+.section-shadow {
+  box-shadow:
+    0 -2px 16px rgb(0 0 0 / 4%),
+    0 4px 16px rgb(0 0 0 / 8%);
+}
+
+.Navbar-gradient {
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, rgb(255 255 255 / 100%) 50%);
+}
+
+.Navbar-backdropVisible {
+  background-color: rgb(0 0 0 / 10%);
+}
+
+.Navbar-linkContainer {
+  @apply flex h-full flex-1 rounded-[32px] bg-neutral-50 px-2 overflow-hidden;
+}
+
+.Navbar-link {
+  @apply flex h-15 flex-1 flex-col items-center justify-center bg-neutral-50 text-slate-500 transition-colors active:bg-neutral-200;
+}
+
+.Navbar-linkActive {
+  @apply text-slate-700;
+}
+
+i.Navbar-linkIcon {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.Navbar-linkText {
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.Navbar-actionButton {
+  @apply bg-slate-700 text-neutral-200 h-12 w-12 rounded-full flex items-center justify-center active:bg-slate-800 transition-colors;
+}
+
+.Navbar-actionButtonIcon {
+  @apply text-[18px] ml-[-1px] mb-[-1px];
+}
