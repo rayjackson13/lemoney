@@ -5,7 +5,7 @@
   import { dateToISOString, parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { FirebaseController } from '$utils/FirebaseController'
 
   const getDefaultRecord = (): Transaction => ({
     amount: null,
@@ -72,7 +72,7 @@
 
     try {
       isSubmitting = true
-      FirebaseClientController.addTransactions(validRows)
+      FirebaseController.addTransactions(validRows)
       records = [getDefaultRecord()]
       queueMicrotask(() => {
         focusLastRecord()

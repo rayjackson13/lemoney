@@ -5,6 +5,7 @@
   let { children } = $props()
 
   $effect(() => {
+    console.log($userStore)
     if ($userStore.isReady && !!$userStore.user) {
       goto('/', { replaceState: true })
     }

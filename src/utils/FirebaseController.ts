@@ -9,12 +9,14 @@ import {
   signOut,
   type Auth,
   type User,
+  type UserInfo,
 } from 'firebase/auth'
 import {
   collection,
   CollectionReference,
   deleteDoc,
   doc,
+  getDocs,
   getFirestore,
   onSnapshot,
   Query,
@@ -29,9 +31,10 @@ import type { Transaction, TransactionDTO } from '$types/forms'
 import { userStore } from '$stores/user'
 import { transactionsStore } from '$stores/transactions'
 import { browser } from '$app/environment'
-import Cookies from 'js-cookie'
 import { dateToISOString } from './dates'
-import { addDays } from 'date-fns'
+import { timePeriod } from '$stores/timePeriod'
+import { get } from 'svelte/store'
+import { appReady } from '$stores/appReady'
 
 const provider = new GoogleAuthProvider()
 
@@ -43,82 +46,64 @@ export const firebaseConfig: FirebaseOptions = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-export class FirebaseClientController {
+export class FirebaseController {
   private static _app: FirebaseApp
   private static _auth: Auth
   private static _db: Firestore
   private static _unsubscribeWatcher: Unsubscribe | null = null
 
-  static initialize = () => {
+  static initialize = async () => {
     this._app = initializeApp(firebaseConfig)
     this._auth = getAuth(this._app)
     this._db = getFirestore(this._app)
 
-    if (browser) onAuthStateChanged(this._auth, this.onAuthChanged)
+    await this.loadInitialData()
   }
 
-  private static onAuthChanged = async (user: User | null): Promise<void> => {
-    if (!user) {
-      if (this._unsubscribeWatcher && typeof this._unsubscribeWatcher === 'function') {
-        this._unsubscribeWatcher()
-        this._unsubscribeWatcher = null
-      }
+  static loadInitialData = async () => {
+    if (!browser) return
 
-      userStore.set({ isReady: true, user: null })
-      Cookies.remove('session_token')
-      return
-    }
-
+    const user = await this.waitForAuth()
     userStore.set({ isReady: true, user })
-    const { token } = await user.getIdTokenResult()
-    Cookies.set('session_token', token, {
-      path: '/',
-      sameSite: 'strict',
-      expires: addDays(new Date(), 30),
-    })
+    if (user) await this.loadCurrentTransactions()
+
+    appReady.set(true)
   }
 
   static waitForAuth = async (): Promise<User | null> => {
     if (this._auth.currentUser) return Promise.resolve(this._auth.currentUser)
 
-    return new Promise((resolve) => {
+    const user = await new Promise<User | null>((resolve) => {
       const unsubscribe = onAuthStateChanged(this._auth, (user) => {
         unsubscribe()
         resolve(user)
       })
     })
-  }
 
-  private static checkAuth = (): void => {
-    if (!this._auth) {
-      throw new Error('Attempted to call Firebase Auth before it was initialized.')
-    }
+    return user
   }
 
   static authorize = async (): Promise<void> => {
-    this.checkAuth()
-
     try {
       await setPersistence(this._auth, browserLocalPersistence)
-      await signInWithPopup(this._auth, provider)
+      const result = await signInWithPopup(this._auth, provider)
+      const user = result.user.toJSON() as UserInfo
+      userStore.set({ isReady: true, user })
     } catch (error) {
-      throw new Error(`Unsuccessful login attempt: ${error}`)
+      console.error(`Unsuccessful login attempt: ${error}`)
     }
   }
 
   static logout = async (): Promise<void> => {
-    this.checkAuth()
-
     try {
       await signOut(this._auth)
+      userStore.set({ isReady: true, user: null })
     } catch (error) {
-      throw new Error(`Unsuccessful logout attempt: ${error}`)
+      console.error(`Unsuccessful logout attempt: ${error}`)
     }
   }
 
   static getTransactionsReference = (): CollectionReference => {
-    this.checkAuth()
-
     const userUid = this._auth.currentUser?.uid
     if (!userUid) throw new Error('User unauthorized')
 
@@ -132,6 +117,20 @@ export class FirebaseClientController {
       where('date', '>=', dateToISOString(dates[0])),
       where('date', '<=', dateToISOString(dates[1])),
     )
+
+  static loadCurrentTransactions = async (): Promise<void> => {
+    const collectionRef = this.getTransactionsQuery(get(timePeriod))
+
+    const snapshot = await getDocs(collectionRef)
+    const docs = snapshot.docs
+      .map((doc) => ({
+        ...(doc.data() as TransactionDTO),
+        id: doc.id,
+      }))
+      .toSorted((a, b) => a.key.localeCompare(b.key))
+
+    transactionsStore.set(docs)
+  }
 
   static watchTransactions = (dates: [Date, Date]) => {
     const collectionRef = this.getTransactionsQuery(dates)

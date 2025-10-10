@@ -4,18 +4,6 @@
   import TransactionHistory from './components/TransactionHistory/View.svelte'
   import RecordsByCategories from './components/RecordsByCategories/View.svelte'
   import EditTransactionModal from './modals/EditTransactionModal.svelte'
-  import type { Transaction } from '$types/forms'
-  import { transactionsStore } from '$stores/transactions'
-
-  type Props = {
-    data: {
-      transactions: Transaction[]
-    }
-  }
-
-  const { data }: Props = $props()
-
-  transactionsStore.set(data.transactions)
 </script>
 
 <svelte:head><title>lemoney | Бюджет</title></svelte:head>

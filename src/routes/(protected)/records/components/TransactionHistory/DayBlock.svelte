@@ -6,7 +6,7 @@
   import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
   import { parseDateFromISOString } from '$utils/dates'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { FirebaseController } from '$utils/FirebaseController'
   import clsx from 'clsx'
   import { format } from 'date-fns'
   import { ru } from 'date-fns/locale'
@@ -64,7 +64,7 @@
     if (!selectedId) return
 
     try {
-      FirebaseClientController.removeTransaction(selectedId)
+      FirebaseController.removeTransaction(selectedId)
     } catch (e) {
       console.error(e)
     }

@@ -1,19 +1,17 @@
 <script lang="ts">
   import '../app.css'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { FirebaseController } from '$utils/FirebaseController'
   import type { Snippet } from 'svelte'
-  import type { UserInfo } from 'firebase/auth'
 
   type Props = {
     children: Snippet<[]>
-    data: {
-      user: UserInfo | null
-    }
   }
 
   let { children }: Props = $props()
 
-  FirebaseClientController.initialize()
+  $effect.pre(() => {
+    FirebaseController.initialize()
+  })
 </script>
 
 {@render children?.()}

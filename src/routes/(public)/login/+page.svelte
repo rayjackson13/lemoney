@@ -1,8 +1,8 @@
 <script lang="ts">
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
-  import { onMount } from 'svelte'
+  import { appReady } from '$stores/appReady.js'
+  import { FirebaseController } from '$utils/FirebaseController.js'
   import { Spring } from 'svelte/motion'
 
   let { data } = $props()
@@ -32,7 +32,7 @@
     return `transform: translateY(${y}px); opacity: ${opacity}`
   })
 
-  onMount(() => {
+  const onLoad = async (): Promise<void> => {
     logoAnim.set({ y: 50, opacity: 1, scale: 1 })
 
     setTimeout(() => {
@@ -44,11 +44,17 @@
       quotesAnim.set({ y: 0, opacity: 1, scale: 1 })
       buttonAnim.set({ y: 0, opacity: 1 })
     }, 1500)
+  }
+
+  $effect.pre(() => {
+    if ($appReady) {
+      onLoad()
+    }
   })
 
   const onLoginPressed = async () => {
     try {
-      await FirebaseClientController.authorize()
+      await FirebaseController.authorize()
     } catch (e) {
       console.error(e)
     }
@@ -67,7 +73,7 @@
   >
     <div class="flex w-full flex-col items-center justify-center gap-8">
       <div style={logoStyle}>
-        <Logo class="h-[56px] w-[194px] lg:h-[72px] lg:w-[250px]" />
+        <Logo class="h-[56px] w-[194px] text-zinc-50 lg:h-[72px] lg:w-[250px]" />
       </div>
 
       <div style={quotesStyle}>

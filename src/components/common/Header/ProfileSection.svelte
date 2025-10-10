@@ -2,9 +2,8 @@
   import { clsx } from 'clsx'
   import { fly, slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
-  import { goto } from '$app/navigation'
   import { userStore } from '$stores/user'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { FirebaseController } from '$utils/FirebaseController'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -18,12 +17,7 @@
   }
 
   const logout = async (): Promise<void> => {
-    try {
-      await FirebaseClientController.logout()
-      goto('/login', { replaceState: true })
-    } catch (e) {
-      console.error('Could not log out', e)
-    }
+    await FirebaseController.logout()
   }
 </script>
 

@@ -2,39 +2,34 @@
   import Header from '$components/common/Header/index.svelte'
   import { fly } from 'svelte/transition'
   import { type Snippet } from 'svelte'
-  import { type UserInfo } from 'firebase/auth'
-  import { userStore } from '$stores/user'
-  import { FirebaseClientController } from '$utils/FirebaseClientController'
+  import { FirebaseController } from '$utils/FirebaseController'
   import { timePeriod } from '$stores/timePeriod'
+  import { userStore } from '$stores/user'
+  import { goto } from '$app/navigation'
+  import SplashScreen from '$components/common/SplashScreen/SplashScreen.svelte'
+  import { appReady } from '$stores/appReady'
 
   type Props = {
     children: Snippet<[]>
-    data: {
-      user: UserInfo
-    }
   }
 
-  let { children, data }: Props = $props()
-
-  if (data.user) {
-    userStore.set({
-      isReady: true,
-      user: data.user,
-    })
-  }
+  let { children }: Props = $props()
 
   let unsubscribe: () => void
 
-  const watchTransactions = async (dates: [Date, Date]) => {
-    await FirebaseClientController.waitForAuth()
-    unsubscribe = FirebaseClientController.watchTransactions(dates)
-  }
-
   $effect(() => {
-    watchTransactions($timePeriod)
+    if ($appReady && !!$userStore.user) {
+      unsubscribe = FirebaseController.watchTransactions($timePeriod)
+    }
 
     return () => {
       if (unsubscribe) unsubscribe()
+    }
+  })
+
+  $effect(() => {
+    if ($userStore.isReady && !$userStore.user) {
+      goto('/login', { replaceState: true })
     }
   })
 </script>
@@ -48,3 +43,5 @@
     {@render children?.()}
   </div>
 </main>
+
+<SplashScreen />
