@@ -7,7 +7,6 @@
 
   let isVisible = $state(!$appReady)
   let animationFinished = $state(false)
-  let startTime = performance.now()
 
   const bgAnim = new Spring({ opacity: 1 }, { stiffness: 0.2, damping: 0.3, precision: 0.1 })
   const logoAnim = new Spring(
