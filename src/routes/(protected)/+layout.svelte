@@ -39,8 +39,8 @@
   <Header />
 </div>
 
-<main class="h-full w-full xl:pt-12">
-  <div class="relative mx-auto flex h-full w-full max-w-[1400px] px-4 py-8">
+<main class="App-main h-full w-full xl:pt-12">
+  <div class="relative mx-auto flex h-full w-full max-w-[1400px] px-4 py-4 xl:py-8">
     {@render children?.()}
   </div>
 </main>

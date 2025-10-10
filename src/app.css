@@ -2,8 +2,18 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 
 :root {
-  --tracking-tightest: -0.0005em;
+  /* dimensions */
+  --header-height: 0;
+  --mobile-navbar-height: 76px;
   /* letter-spacing */
+  --tracking-tightest: -0.0005em;
+}
+
+@media (width >=80rem) {
+  :root {
+    --header-height: 48px;
+    --mobile-navbar-height: 0;
+  }
 }
 
 html,
@@ -26,6 +36,11 @@ body {
 
 button {
   cursor: pointer;
+}
+
+.App-main {
+  padding-top: var(--header-height);
+  padding-bottom: var(--mobile-navbar-height);
 }
 
 .LoginBackground {

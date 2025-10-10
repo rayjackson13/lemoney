@@ -31,7 +31,7 @@
   ]
 </script>
 
-<header class="AppHeader h-12 w-full py-2 text-neutral-200 shadow-md">
+<header class="AppHeader w-full py-2 text-neutral-200 shadow-md">
   <div
     class="relative mx-auto flex h-full w-full max-w-[1400px] items-center justify-between gap-4 px-4"
   >
@@ -65,6 +65,7 @@
 
 <style>
   .AppHeader {
+    height: var(--header-height);
     background-color: #19212c;
     background-image: url('/pattern.svg');
     background-repeat: repeat-x;
