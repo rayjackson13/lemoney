@@ -1,4 +1,5 @@
 @use "theme" as *;
+@use "components/card" as *;
 
 :root {
   /* dimensions */
@@ -89,6 +90,16 @@ button {
   border-left-style: solid;
   top: calc(50% - 8px);
   border-radius: 2px;
+}
+
+.Input-adornment {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .section-shadow {

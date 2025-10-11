@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="w-105 flex flex-col gap-4">
+    <div class="w-105 flex flex-col gap-4 self-start">
       <SummaryView />
     </div>
   </div>

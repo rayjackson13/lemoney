@@ -115,20 +115,20 @@
 </script>
 
 <form class="Card" onsubmit={onSubmit}>
-  <div class="Card-header items-center justify-between">
-    <p class="text-sm leading-[16px] font-medium">Добавить транзакцию</p>
+  <div class="Card-header justify-between">
+    <p class="text-sm font-medium leading-[16px]">Добавить транзакцию</p>
 
     <button class="flex items-center gap-1" type="button" onclick={addRecord}>
       <span class="Hotkey">Alt+N</span>
       <div class="IconButton" aria-label="Добавить строку">
-        <i class="fas fa-plus h-4 w-4! text-sm leading-4!"></i>
+        <i class="fas fa-plus w-4! leading-4! h-4 text-sm"></i>
       </div>
     </button>
   </div>
 
   <div
     bind:this={rowContainer}
-    class="flex max-h-90 flex-col gap-1 overflow-x-hidden overflow-y-auto py-2"
+    class="max-h-90 flex flex-col gap-1 overflow-y-auto overflow-x-hidden py-2"
   >
     {#each records as record, index (record.id)}
       <RecordRow bind:record={records[index]} {index} {removeRecord} />
@@ -139,7 +139,7 @@
     <span class="Hotkey">Ctrl+Enter</span>
 
     <button class="Button-dark" disabled={isSubmitting} type="submit">
-      <i class="fas fa-check h-[14px] w-[14px]! text-[12px]"></i>
+      <i class="fas fa-check w-[14px]! h-[14px] text-[12px]"></i>
       <span class="pb-[1px]">Добавить</span>
     </button>
   </div>

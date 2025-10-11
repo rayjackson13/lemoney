@@ -94,7 +94,7 @@
 </script>
 
 <div
-  class={clsx('relative h-8 w-30', classes?.root)}
+  class={clsx('w-30 relative', classes?.root)}
   use:onOutsideClick={{ callback: closeCalendar, refs: [popoverRef] }}
 >
   <input
@@ -107,12 +107,7 @@
     {placeholder}
   />
 
-  <div
-    class={clsx(
-      'pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-sm text-slate-500',
-      classes?.adornment,
-    )}
-  >
+  <div class={clsx('Input-adornment right-0 h-8 w-8 text-sm text-slate-500', classes?.adornment)}>
     <i class="fas fa-calendar"></i>
   </div>
 
@@ -124,7 +119,7 @@
       use:teleport={{ rect: inputBox }}
     >
       <div
-        class="flex items-center justify-between border-b-1 border-b-gray-200 bg-neutral-50 px-4 py-2"
+        class="border-b-1 flex items-center justify-between border-b-gray-200 bg-neutral-50 px-4 py-2"
         in:fly={{ x: 16, duration: 200 }}
       >
         <button
@@ -137,7 +132,7 @@
           <i class="fas fa-chevron-left"></i>
         </button>
 
-        <span class="text-sm font-medium text-slate-700 capitalize select-none">
+        <span class="select-none text-sm font-medium capitalize text-slate-700">
           {format(new Date(currentYear, currentMonth), 'LLLL yyyy', { locale: ru })}
         </span>
 
@@ -155,7 +150,7 @@
       <div class="grid grid-cols-7 gap-1 p-2" in:fly={{ x: 16, delay: 50, duration: 200 }}>
         {#each ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] as day (day)}
           <div
-            class="flex h-5 items-center justify-center text-center text-xs font-medium text-slate-500 select-none"
+            class="flex h-5 select-none items-center justify-center text-center text-xs font-medium text-slate-500"
           >
             {day}
           </div>

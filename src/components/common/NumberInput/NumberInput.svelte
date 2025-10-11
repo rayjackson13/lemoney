@@ -90,7 +90,7 @@
   {#if mode !== 'normal'}
     <div
       class={clsx(
-        'pointer-events-none absolute top-0 right-0 flex h-full items-center justify-center pr-2 text-sm text-slate-900 opacity-70',
+        'Input-adornment right-0 h-full pr-3 text-sm text-slate-900 opacity-70',
         classes?.adornment,
       )}
     >

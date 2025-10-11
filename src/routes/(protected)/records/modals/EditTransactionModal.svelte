@@ -63,24 +63,28 @@
 
 {#if transaction}
   <div class="Modal-backdrop" transition:fade={{ duration: 100 }}>
-    <form class="Card min-w-100!" onsubmit={onSubmit}>
+    <form class="Card md:min-w-100! w-full! md:w-auto! mx-4" onsubmit={onSubmit}>
       <div class="Card-header items-center justify-between">
-        <p class="text-sm leading-[16px] font-medium">Редактирование транзакции</p>
+        <p class="font-medium leading-[16px] md:text-sm">Редактирование транзакции</p>
 
         <button
           class="IconButton opacity-100! hover:opacity-70! active:opacity-20!"
           aria-label="Закрыть окно"
         >
-          <i class="fas fa-close h-4 w-4! text-sm leading-4!"></i>
+          <i class="fas fa-close w-4! leading-4! h-4 md:text-sm"></i>
         </button>
       </div>
 
-      <div class="flex max-h-90 flex-col gap-1 overflow-x-hidden overflow-y-auto py-2">
-        <div class="AddRecordForm-recordRow flex items-center gap-1 px-4">
-          <DatePicker bind:value={transaction.date} />
+      <div
+        class="max-h-90 flex flex-col gap-2 overflow-y-auto overflow-x-hidden py-4 md:gap-1 md:py-2"
+      >
+        <div
+          class="AddRecordForm-recordRow flex flex-col items-center gap-2 px-4 md:flex-row md:gap-1"
+        >
+          <DatePicker bind:value={transaction.date} classes={{ root: 'w-full md:w-auto' }} />
 
           <Autocomplete
-            classes={{ root: 'flex-1' }}
+            classes={{ root: 'w-full md:flex-1 md:w-auto' }}
             options={transactionTypes}
             placeholder="Тип"
             bind:value={transaction.type}
@@ -89,14 +93,19 @@
           <NumberInput
             placeholder="0"
             maxValue={999_999_999}
-            classes={{ input: 'AddRecordForm-amountInput' }}
+            classes={{
+              input: 'AddRecordForm-amountInput max-sm:w-full!',
+              root: 'w-full md:w-auto',
+            }}
             bind:value={transaction.amount}
           />
         </div>
 
-        <div class="AddRecordForm-recordRow flex items-center gap-1 px-4">
+        <div
+          class="AddRecordForm-recordRow flex flex-col items-center gap-2 px-4 md:flex-row md:gap-1"
+        >
           <input
-            class="Input flex-1"
+            class="Input w-full md:w-auto md:flex-1"
             type="text"
             placeholder="Описание"
             bind:value={transaction.description}
@@ -104,7 +113,7 @@
 
           {#if !transaction.type || ['Expense', 'ExpensePlanned'].includes(transaction.type)}
             <Autocomplete
-              classes={{ root: 'w-45' }}
+              classes={{ root: 'w-full md:w-45' }}
               options={$categories}
               placeholder="Категория"
               bind:value={transaction.category}
@@ -113,13 +122,15 @@
         </div>
       </div>
 
-      <div class="Card-footer justify-end">
-        <span class="Hotkey">Ctrl+Enter</span>
+      <div class="Card-footer Card-footer--noGutters">
+        <div class="flex w-full items-center justify-center gap-2 md:justify-end md:px-4">
+          <span class="Hotkey hidden md:block">Ctrl+Enter</span>
 
-        <button class="Button-dark" disabled={isSubmitting} type="submit">
-          <i class="fas fa-check h-[14px] w-[14px]! text-[12px]"></i>
-          <span class="pb-[1px]">Сохранить</span>
-        </button>
+          <button class="Card-footerButton" disabled={isSubmitting} type="submit">
+            <i class="fas fa-check"></i>
+            <span>Сохранить</span>
+          </button>
+        </div>
       </div>
     </form>
   </div>

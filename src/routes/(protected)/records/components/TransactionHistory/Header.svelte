@@ -56,20 +56,20 @@
   })
 </script>
 
-<div class="Card-header flex-col gap-1! py-[6px]!">
-  <div class="flex w-full items-center gap-1">
-    <p class="flex-1 text-sm leading-[1] font-medium">История транзакций</p>
+<div class="Card-header flex-col gap-1">
+  <div class="flex w-full flex-1 items-center gap-1">
+    <p class="flex-1 text-sm font-medium leading-[1]">История транзакций</p>
 
     <div class="relative">
       <input
         bind:this={searchInputRef}
         bind:value={filters.query}
-        class="Input-small w-36 pr-6!"
+        class="Input-small pr-6! w-36"
         type="text"
         placeholder="Поиск..."
       />
 
-      <div class="pointer-events-none absolute top-0 right-2 flex h-full items-center gap-1">
+      <div class="pointer-events-none absolute right-2 top-0 flex h-full items-center gap-1">
         {#if !filters.query}
           <span class="Hotkey pt-[2px]" transition:fly={{ x: 8, duration: 150 }}>Ctrl+F</span>
         {/if}
@@ -84,7 +84,7 @@
       type="button"
       onclick={toggleFilters}
     >
-      <i class="fas fa-filter h-4 w-4! text-xs leading-4!"></i>
+      <i class="fas fa-filter w-4! leading-4! h-4 text-xs"></i>
     </button>
   </div>
 

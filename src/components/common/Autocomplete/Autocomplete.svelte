@@ -147,7 +147,7 @@
 </script>
 
 <div
-  class={clsx('relative h-8 w-36', classes?.root)}
+  class={clsx('relative w-36', classes?.root)}
   use:onOutsideClick={{ callback: closeDropdown, refs: [popoverRef] }}
 >
   <input
@@ -155,7 +155,7 @@
     bind:value={inputValue}
     type="text"
     class={clsx(
-      'Input w-full overflow-hidden pr-8! text-ellipsis',
+      'Input pr-8! w-full overflow-hidden text-ellipsis',
       selectedOption?.ribbon && 'pl-[14px]!',
       classes?.input,
     )}
@@ -170,10 +170,7 @@
   {/if}
 
   <div
-    class={clsx(
-      'pointer-events-none absolute top-0 right-0 flex h-8 w-8 items-center justify-center text-[10px] text-slate-500',
-      classes?.adornment,
-    )}
+    class={clsx('Input-adornment right-0 h-8 w-8 text-[10px] text-slate-500', classes?.adornment)}
   >
     <i class="fas fa-chevron-down"></i>
   </div>
