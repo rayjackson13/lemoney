@@ -43,12 +43,12 @@
   </div>
 {/if}
 
-{#if !$isDesktop}
-  <TimeBlock />
-{/if}
+<main class="App-main">
+  {#if !$isDesktop}
+    <TimeBlock />
+  {/if}
 
-<main class="App-main h-full w-full xl:pt-12">
-  <div class="relative mx-auto flex h-full w-full max-w-[1400px] py-4 xl:px-4 xl:py-8">
+  <div class="App-mainContent">
     {@render children?.()}
   </div>
 </main>

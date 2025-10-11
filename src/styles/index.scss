@@ -40,6 +40,35 @@ button {
 .App-main {
   padding-top: var(--header-height);
   padding-bottom: var(--mobile-navbar-height);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+
+  @include screen(md) {
+    overflow-y: hidden;
+  }
+}
+
+.App-mainContent {
+  position: relative;
+  margin-inline: auto;
+  display: flex;
+  width: 100%;
+  flex: 1;
+  max-width: 1400px;
+  padding-block: 16px;
+
+  @include screen(md) {
+    /* Avoid flex overflow */
+    min-height: 0;
+  }
+
+  @include screen(xl) {
+    padding-inline: 16px;
+    padding-block: 32px;
+  }
 }
 
 .Teleport-container {

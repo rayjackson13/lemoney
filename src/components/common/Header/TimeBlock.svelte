@@ -106,6 +106,7 @@
     user-select: none;
     padding-inline: 8px;
     overflow: hidden;
+    max-width: 450px;
 
     @include screen(xl) {
       background-color: rgb(0 0 0 / 50%);
@@ -138,12 +139,12 @@
   }
 
   .TimeBlock-button:active {
-    @include screen(mobile) {
-      background-color: var(--color-neutral-200);
-      color: var(--color-slate-700);
-    }
+    background-color: var(--color-neutral-200);
+    color: var(--color-slate-700);
 
     @include screen(xl) {
+      background-color: transparent;
+      color: var(--color-gray-200);
       opacity: 0.7;
     }
   }

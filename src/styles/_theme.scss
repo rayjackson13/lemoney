@@ -5,7 +5,6 @@ $breakpoints: (
   lg: '(width >= 64rem)',
   xl: '(width >= 80rem)',
   '2xl': '(width >= 96rem)',
-  'mobile': '(width < 80rem)',
 );
 
 @mixin screen($size) {

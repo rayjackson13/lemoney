@@ -37,9 +37,9 @@
   const nextMonthBudget = $derived(dailyBudget > 0 ? daysToIncome * dailyBudget : 0)
 </script>
 
-<div class="Card">
+<div class="Card Card-summary">
   <div class="Card-header">
-    <p class="text-sm leading-[16px] font-medium">Сводка</p>
+    <p class="text-sm font-medium leading-[16px]">Сводка</p>
   </div>
 
   <div class="flex flex-col">
@@ -74,7 +74,7 @@
         <span>Сбережения</span>
         <span class="flex items-center gap-1 font-medium">
           <span class="text-xs text-slate-500">{savingsPercentage}%</span>
-          <span class="pb-[2px] text-[10px] leading-2 text-slate-500">&bull;</span>
+          <span class="leading-2 pb-[2px] text-[10px] text-slate-500">&bull;</span>
           {formatter.format(savingsAmount)} ₽
         </span>
       </p>
@@ -83,7 +83,7 @@
         <span>Инвестиции</span>
         <span class="flex items-center gap-1 font-medium">
           <span class="text-xs text-slate-500">{investmentsPercentage}%</span>
-          <span class="pb-[2px] text-[10px] leading-2 text-slate-500">&bull;</span>
+          <span class="leading-2 pb-[2px] text-[10px] text-slate-500">&bull;</span>
           {formatter.format(investmentsAmount)} ₽
         </span>
       </p>
@@ -112,7 +112,7 @@
     </div>
   </div>
 
-  <div class="Card-footer flex-col items-start! gap-0!">
+  <div class="Card-footer items-start! gap-0! flex-col">
     {#if nextMonthBudget > 0}
       <p class="text-xs leading-[20px] opacity-70">
         Рекомендуется оставить хотя бы {formatter.format(nextMonthBudget)} ₽ на следующий месяц

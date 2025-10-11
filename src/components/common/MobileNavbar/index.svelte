@@ -46,18 +46,18 @@
 {#if user}
   <div
     class={clsx(
-      'pointer-events-none fixed top-0 right-0 bottom-0 left-0 z-1 transition-all',
+      'z-1 pointer-events-none fixed bottom-0 left-0 right-0 top-0 transition-all',
       isMenuOpen && 'Navbar-backdropVisible backdrop-blur-xs',
     )}
   >
     <div
-      class="Navbar pointer-events-auto absolute right-0 bottom-0 left-0 flex flex-col-reverse gap-4"
+      class="Navbar pointer-events-auto absolute bottom-0 left-0 right-0 flex flex-col-reverse gap-4"
       use:onOutsideClick={{ callback: closeMenu }}
       transition:fly={{ y: 48 }}
     >
       <div
         class={clsx(
-          'Navbar-gradient absolute top-0 right-0 bottom-0 left-0 -z-1 opacity-100 transition-opacity',
+          'Navbar-gradient -z-1 absolute bottom-0 left-0 right-0 top-0 opacity-100 transition-opacity',
           isMenuOpen && 'opacity-0!',
         )}
       ></div>
@@ -96,7 +96,7 @@
       {#if isMenuOpen}
         <div class="mx-auto w-full max-w-[450px] px-4">
           <aside
-            class="Navbar-linkContainer section-shadow z-0 px-0! py-2"
+            class="Navbar-linkContainer section-shadow px-0! z-0 py-2"
             transition:slide={{ duration: 150 }}
           >
             <ul class="w-full">
@@ -106,7 +106,7 @@
                   href="/help"
                   onclick={closeMenu}
                 >
-                  <i class="fas fa-question w-10! pl-6 text-left! text-sm"></i>
+                  <i class="fas fa-question w-10! text-left! pl-6 text-sm"></i>
                   <span class="px-3">Справка</span>
                 </a>
               </li>
@@ -116,7 +116,7 @@
                   type="button"
                   onclick={logout}
                 >
-                  <i class="fas fa-arrow-right-from-bracket w-10! pl-6 text-left! text-sm"></i>
+                  <i class="fas fa-arrow-right-from-bracket w-10! text-left! pl-6 text-sm"></i>
                   <span class="px-3">Выйти</span>
                 </button>
               </li>
