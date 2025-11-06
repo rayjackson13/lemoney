@@ -4,6 +4,7 @@
   import type { FormEventHandler } from 'svelte/elements'
 
   type Props = {
+    autoFocus?: boolean
     classes?: {
       adornment?: string
       input?: string
@@ -17,6 +18,7 @@
   }
 
   let {
+    autoFocus = false,
     classes,
     placeholder,
     onInput,
@@ -66,6 +68,10 @@
   const handleBlur = () => {
     inputValue = getInputValue()
   }
+
+  $effect(() => {
+    if (autoFocus) inputRef.focus()
+  })
 </script>
 
 <span class={clsx('relative', classes?.root)}>

@@ -55,6 +55,14 @@
       document.removeEventListener('keydown', keyHandler)
     }
   })
+
+  // $effect.pre(() => {
+  //   document.documentElement.classList.add('no-touch-action')
+
+  //   return () => {
+  //     document.documentElement.classList.remove('no-touch-action')
+  //   }
+  // })
 </script>
 
 {#if $isCreateModalOpen}
@@ -92,6 +100,7 @@
           />
 
           <NumberInput
+            autoFocus
             placeholder="0"
             maxValue={999_999_999}
             classes={{
