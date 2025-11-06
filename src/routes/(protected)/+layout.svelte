@@ -11,6 +11,7 @@
   import MobileNavbar from '$components/common/MobileNavbar/index.svelte'
   import TimeBlock from '$components/common/Header/TimeBlock.svelte'
   import { useMediaQuery } from '$utils/hooks/useMediaQuery'
+  import CreateTransactionModal from '$components/modals/CreateTransactionModal/CreateTransactionModal.svelte'
 
   type Props = {
     children: Snippet<[]>
@@ -58,3 +59,5 @@
 {/if}
 
 <SplashScreen />
+
+<CreateTransactionModal />

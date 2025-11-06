@@ -7,6 +7,7 @@
   import NavLink from './NavLink.svelte'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import clsx from 'clsx'
+  import { isCreateModalOpen } from '$stores/isCreateModalOpen'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -17,6 +18,10 @@
 
   const closeMenu = (): void => {
     isMenuOpen = false
+  }
+
+  const onCreateTransactionPressed = (): void => {
+    isCreateModalOpen.set(true)
   }
 
   const logout = async (): Promise<void> => {
@@ -70,7 +75,11 @@
             {/each}
           </div>
 
-          <button class="Navbar-actionButton section-shadow" aria-label="Добавить запись">
+          <button
+            class="Navbar-actionButton section-shadow"
+            aria-label="Добавить запись"
+            onclick={onCreateTransactionPressed}
+          >
             <i class="fas fa-plus Navbar-actionButtonIcon"></i>
           </button>
 

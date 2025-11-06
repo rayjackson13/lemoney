@@ -2,21 +2,13 @@
   import type { Transaction } from '$types/forms'
   import { onMount, tick } from 'svelte'
   import RecordRow from './Row.svelte'
-  import { dateToISOString, parseDateFromISOString } from '$utils/dates'
+  import { parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
   import { FirebaseController } from '$utils/FirebaseController'
+  import { createTransaction } from '$utils/transactions/createTransaction'
 
-  const getDefaultRecord = (): Transaction => ({
-    amount: null,
-    category: null,
-    date: dateToISOString(new Date()),
-    description: '',
-    id: crypto.randomUUID(),
-    type: 'Expense',
-  })
-
-  let records = $state<Transaction[]>([getDefaultRecord()])
+  let records = $state<Transaction[]>([createTransaction()])
   let isSubmitting = $state(false)
   let rowContainer: HTMLDivElement
 
@@ -32,7 +24,7 @@
   }
 
   const addRecord = async (): Promise<void> => {
-    const newRecord = getDefaultRecord()
+    const newRecord = createTransaction()
     const lastRecord = records[records.length - 1]
     newRecord.date = lastRecord.date
     records.push(newRecord)
@@ -47,7 +39,7 @@
     }
 
     const { id } = records[0]
-    records = [{ ...getDefaultRecord(), id }]
+    records = [{ ...createTransaction(), id }]
   }
 
   const isRowValid = (row: Transaction): boolean => {
@@ -60,7 +52,7 @@
   }
 
   const isDirty = (): boolean => {
-    const defaultRecord = getDefaultRecord()
+    const defaultRecord = createTransaction()
     return records.some((rec) => !isEqual({ ...rec, id: '' }, { ...defaultRecord, id: '' }))
   }
 
@@ -73,7 +65,7 @@
     try {
       isSubmitting = true
       FirebaseController.addTransactions(validRows)
-      records = [getDefaultRecord()]
+      records = [createTransaction()]
       queueMicrotask(() => {
         focusLastRecord()
       })
