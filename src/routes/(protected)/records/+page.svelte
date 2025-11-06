@@ -54,6 +54,7 @@
     }
 
     @include screen(xl) {
+      padding-inline: 0;
       flex-direction: row;
     }
 
@@ -61,6 +62,10 @@
       @include screen(md) {
         align-self: flex-start;
         flex: 0.8;
+      }
+
+      @include screen(md) {
+        align-self: unset;
       }
     }
   }
