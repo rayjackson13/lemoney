@@ -16,23 +16,28 @@
   })
 
   if (browser) {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
 
     // Disable body scroll on iOS when the keyboard is open
     window.addEventListener('focusin', () => {
       const focusedEl = document.activeElement
 
       if (
-        isIOS &&
+        isTouchDevice &&
         (focusedEl instanceof HTMLInputElement || focusedEl instanceof HTMLTextAreaElement)
       ) {
         document.body.style.position = 'fixed'
-        focusedEl.scrollIntoView()
+        setTimeout(() => {
+          focusedEl.scrollIntoView({
+            block: 'center',
+            behavior: 'smooth',
+          })
+        }, 300)
       }
     })
 
     window.addEventListener('focusout', () => {
-      if (isIOS) document.body.style.position = ''
+      if (isTouchDevice) document.body.style.position = ''
     })
   }
 </script>
