@@ -61,6 +61,7 @@
 
   const onBlur = () => {
     inputValue = selectedOption?.name ?? ''
+    setTimeout(closeDropdown, 100)
   }
 
   const onInput: FormEventHandler<HTMLInputElement> = (ev) => {
@@ -132,7 +133,7 @@
   }
 
   function onWindowResize() {
-    closeDropdown()
+    inputBox = inputRef?.getBoundingClientRect()
   }
 
   onMount(() => {
@@ -179,7 +180,7 @@
     <div
       bind:this={popoverRef}
       use:teleport={{ rect: inputBox }}
-      class="z-10 mt-1 max-h-[40vh] min-w-full overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg"
+      class="z-10 mt-1 min-w-full overflow-auto overflow-x-hidden rounded-lg bg-white py-1 shadow-lg lg:max-h-[40vh]"
       transition:fly={{ y: -8, duration: 50 }}
       onintrostart={() => (isContainerVisible = true)}
       onoutroend={() => (isContainerVisible = false)}

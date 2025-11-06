@@ -34,6 +34,7 @@
   const firstDayOfWeek = $derived(getDay(startOfMonth(new Date(currentYear, currentMonth))))
 
   const openCalendar = () => {
+    inputBox = inputRef?.getBoundingClientRect()
     isCalendarVisible = true
   }
 
@@ -68,9 +69,16 @@
   }
 
   const onFocus = () => {
-    inputBox = inputRef?.getBoundingClientRect()
     inputRef.select()
     openCalendar()
+  }
+
+  const onButtonPressed = () => {
+    if (isCalendarVisible) {
+      closeCalendar()
+    } else {
+      openCalendar()
+    }
   }
 
   const keyHandler = (ev: KeyboardEvent): void => {
@@ -83,12 +91,18 @@
   const isSelected = (date: Date): boolean =>
     !!selectedDate && dateToISOString(date) === dateToISOString(selectedDate)
 
+  function onWindowResize() {
+    inputBox = inputRef?.getBoundingClientRect()
+  }
+
   onMount(() => {
     imask(inputRef, { mask: Date })
     document.addEventListener('keydown', keyHandler)
+    window.addEventListener('resize', onWindowResize)
 
     return () => {
       document.removeEventListener('keydown', keyHandler)
+      window.removeEventListener('resize', onWindowResize)
     }
   })
 </script>
@@ -100,12 +114,14 @@
   <input
     bind:this={inputRef}
     type="text"
-    class={clsx('Input w-full', classes?.input)}
+    class={clsx('Input md:pointer-events-all pointer-events-none w-full', classes?.input)}
     onfocus={onFocus}
     oninput={onInput}
     value={formattedDate}
     {placeholder}
   />
+
+  <button class="mobile-button" aria-label="Открыть календарь" onclick={onButtonPressed}></button>
 
   <div class={clsx('Input-adornment right-0 h-8 w-8 text-sm text-slate-500', classes?.adornment)}>
     <i class="fas fa-calendar"></i>
@@ -174,3 +190,19 @@
     </div>
   {/if}
 </div>
+
+<style lang="scss">
+  @use '$styles/theme' as *;
+
+  .mobile-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @include screen(md) {
+      display: none;
+    }
+  }
+</style>
