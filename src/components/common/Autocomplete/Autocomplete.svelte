@@ -46,6 +46,13 @@
   const openDropdown = (): void => {
     highlightedIndex = null
     isDropdownVisible = true
+
+    const selectedIndex = getSelectedIndex()
+    if (selectedIndex) {
+      setTimeout(() => {
+        scrollToOption(selectedIndex)
+      }, 0)
+    }
   }
 
   const closeDropdown = (): void => {
@@ -99,9 +106,44 @@
     }
   }
 
+  const getSelectedIndex = (): number | null => {
+    if (!selectedOption) {
+      return null
+    }
+
+    const index = allOptions.findIndex((item) => item.value === selectedOption.value)
+    return index === -1 ? null : index
+  }
+
+  const onNavigateDown = (): void => {
+    const count = visibleOptions.length
+
+    if (highlightedIndex === null) {
+      const selectedIndex = getSelectedIndex()
+      highlightedIndex = selectedIndex !== null ? (selectedIndex + 1) % count : 0
+    } else {
+      highlightedIndex = (highlightedIndex + 1) % count
+    }
+
+    scrollToOption(highlightedIndex)
+  }
+
+  const onNavigateUp = (): void => {
+    const count = visibleOptions.length
+
+    if (highlightedIndex === null) {
+      const selectedIndex = getSelectedIndex()
+      highlightedIndex = selectedIndex !== null ? (selectedIndex - 1 + count) % count : count - 1
+    } else {
+      highlightedIndex = (highlightedIndex - 1 + count) % count
+    }
+
+    scrollToOption(highlightedIndex)
+  }
+
   const keyHandler = (ev: KeyboardEvent): void => {
     if (!isDropdownVisible) {
-      if (document.activeElement === inputRef && !['Escape', 'Tab'].includes(ev.code)) {
+      if (document.activeElement === inputRef && !['Escape', 'Tab', 'AltLeft'].includes(ev.code)) {
         openDropdown()
       }
 
@@ -113,17 +155,13 @@
     }
 
     if (ev.code === 'ArrowDown') {
-      highlightedIndex =
-        highlightedIndex === null ? 0 : Math.min(highlightedIndex + 1, visibleOptions.length - 1)
       ev.preventDefault()
-      scrollToOption(highlightedIndex)
+      onNavigateDown()
     }
 
     if (ev.code === 'ArrowUp') {
-      highlightedIndex =
-        highlightedIndex === null ? visibleOptions.length - 1 : Math.max(highlightedIndex - 1, 0)
       ev.preventDefault()
-      scrollToOption(highlightedIndex)
+      onNavigateUp()
     }
 
     if (ev.code === 'Enter' && highlightedIndex !== null) {
@@ -144,6 +182,10 @@
       document.removeEventListener('keydown', keyHandler)
       window.removeEventListener('resize', onWindowResize)
     }
+  })
+
+  $effect(() => {
+    console.log(highlightedIndex)
   })
 </script>
 

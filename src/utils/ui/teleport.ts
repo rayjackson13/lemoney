@@ -23,7 +23,6 @@ function setContainerPosition(container: HTMLDivElement, { rect, position }: Par
 
   if (rect) {
     const direction = rect.bottom < window.innerHeight / 2 ? 1 : -1
-    console.log(direction)
     container.style.left = `${rect.left}px`
     container.style.minWidth = `${rect.width}px`
 
@@ -32,7 +31,6 @@ function setContainerPosition(container: HTMLDivElement, { rect, position }: Par
       container.style.bottom = '8px'
       container.style.justifyContent = 'flex-start'
     } else {
-      console.log('rect', rect)
       container.style.bottom = `${window.innerHeight - rect.top + 1}px`
       container.style.top = '8px'
       container.style.justifyContent = 'flex-end'

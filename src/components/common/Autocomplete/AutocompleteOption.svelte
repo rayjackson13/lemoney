@@ -16,10 +16,9 @@
 
 <button
   class={clsx(
-    'Autocomplete-option relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
-    'hover:bg-gray-100 active:bg-gray-200',
-    isSelected && 'bg-slate-200 hover:bg-slate-200 active:bg-slate-200',
-    isHighlighted && 'bg-gray-200',
+    'Autocomplete-option option',
+    isSelected && 'selected',
+    isHighlighted && 'highlighted',
   )}
   onclick={onSelect}
   tabindex="-1"
@@ -36,3 +35,30 @@
 {#if !option.value}
   <hr class="my-1 text-gray-200" />
 {/if}
+
+<style lang="scss">
+  .option {
+    position: relative;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    padding-inline: 16px;
+    padding-block: 4px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+
+    &.selected {
+      background-color: var(--color-slate-200);
+    }
+
+    &:hover,
+    &.highlighted {
+      background-color: color-mix(in srgb, var(--color-gray-300) 30%, transparent);
+    }
+
+    &:active {
+      background-color: color-mix(in srgb, var(--color-gray-400) 30%, transparent);
+    }
+  }
+</style>
