@@ -68,8 +68,10 @@
         <p class="font-medium leading-[16px] md:text-sm">Редактирование транзакции</p>
 
         <button
+          type="button"
           class="IconButton opacity-100! hover:opacity-70! active:opacity-20!"
           aria-label="Закрыть окно"
+          onclick={closeModal}
         >
           <i class="fas fa-close w-4! leading-4! h-4 md:text-sm"></i>
         </button>

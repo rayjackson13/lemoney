@@ -69,7 +69,7 @@
 
 <div class="relative flex h-screen w-screen justify-center overflow-hidden">
   <div
-    class="flex w-full max-w-[440px] flex-col items-center justify-center overflow-hidden px-4 pt-8 pb-24"
+    class="flex w-full max-w-[440px] flex-col items-center justify-center overflow-hidden px-4 pb-24 pt-8"
   >
     <div class="flex w-full flex-col items-center justify-center gap-8">
       <div style={logoStyle}>

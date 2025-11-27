@@ -76,6 +76,7 @@
           </div>
 
           <button
+            type="button"
             class="Navbar-actionButton section-shadow"
             aria-label="Добавить запись"
             onclick={onCreateTransactionPressed}
@@ -88,7 +89,7 @@
               <NavLink {...link} />
             {/each}
 
-            <button class="Navbar-link" onclick={toggleMenuOpen}>
+            <button type="button" class="Navbar-link" onclick={toggleMenuOpen}>
               <span class="p-[2px]">
                 <img
                   class="h-6 w-6 rounded-[24px] bg-teal-400"

@@ -121,7 +121,12 @@
     {placeholder}
   />
 
-  <button class="mobile-button" aria-label="Открыть календарь" onclick={onButtonPressed}></button>
+  <button
+    type="button"
+    class="mobile-button"
+    aria-label="Открыть календарь"
+    onclick={onButtonPressed}
+  ></button>
 
   <div class={clsx('Input-adornment right-0 h-8 w-8 text-sm text-slate-500', classes?.adornment)}>
     <i class="fas fa-calendar"></i>

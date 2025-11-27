@@ -22,7 +22,7 @@
 
 <button
   class={clsx(
-    'relative block w-full px-4 py-1 text-left text-sm whitespace-nowrap',
+    'relative block w-full whitespace-nowrap px-4 py-1 text-left text-sm',
     'transition-colors hover:bg-gray-100 active:bg-gray-200',
   )}
   onclick={onClick}

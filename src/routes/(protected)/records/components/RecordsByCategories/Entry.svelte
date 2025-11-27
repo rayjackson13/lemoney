@@ -36,17 +36,17 @@
 
 <div
   class={clsx(
-    'flex min-h-0 min-w-0 shrink-0 flex-col overflow-hidden rounded-lg select-none',
+    'flex min-h-0 min-w-0 shrink-0 select-none flex-col overflow-hidden rounded-lg',
     isOpen && 'bg-gray-100',
   )}
 >
   <button
-    class="flex h-10 items-center gap-2 px-2 py-1 text-left transition-colors duration-50 select-none hover:bg-gray-100"
+    class="duration-50 flex h-10 select-none items-center gap-2 px-2 py-1 text-left transition-colors hover:bg-gray-100"
     onclick={toggleOpen}
     type="button"
   >
     <div class="flex h-8 min-w-0 flex-1 flex-col overflow-hidden">
-      <p class="overflow-hidden text-sm leading-[1.2] text-ellipsis whitespace-nowrap">
+      <p class="overflow-hidden text-ellipsis whitespace-nowrap text-sm leading-[1.2]">
         {categoryName}
       </p>
 

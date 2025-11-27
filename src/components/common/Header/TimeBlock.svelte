@@ -58,13 +58,19 @@
 
 <div class="TimeBlock-outer">
   <div class="TimeBlock-root section-shadow">
-    <button class="TimeBlock-button" aria-label="Предыдущий период" onclick={prevPeriodClicked}>
+    <button
+      type="button"
+      class="TimeBlock-button"
+      aria-label="Предыдущий период"
+      onclick={prevPeriodClicked}
+    >
       <i class="TimeBlock-buttonIcon fas fa-arrow-left"></i>
     </button>
 
     <span class="TimeBlock-text">{periodLabel}</span>
 
     <button
+      type="button"
       disabled={isNextDisabled}
       class="TimeBlock-button"
       aria-label="Следующий период"
