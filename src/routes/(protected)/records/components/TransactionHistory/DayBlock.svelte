@@ -22,7 +22,7 @@
   let ctxMenuPosition = $state<Position | null>(null)
   let selectedId = $state<string | null>(null)
   let touchTimer: ReturnType<typeof setTimeout>
-  let preventEvents = $state(false)
+  let shouldIgnoreClicks = false
   const date = parseDateFromISOString(dateISO)
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,
@@ -58,9 +58,9 @@
   }
 
   const onTouchEnd = (ev: TouchEvent) => {
-    if (preventEvents) ev.preventDefault()
+    if (shouldIgnoreClicks) ev.preventDefault()
     clearTimeout(touchTimer)
-    preventEvents = false
+    shouldIgnoreClicks = false
   }
 
   const onTouchStart = (ev: TouchEvent) => {
@@ -71,9 +71,8 @@
     const touch: Touch = ev.targetTouches[0]
 
     touchTimer = setTimeout(() => {
-      preventEvents = true
+      shouldIgnoreClicks = true
       openContextMenu(target, { x: touch.clientX, y: touch.clientY })
-      // startCooldown()
     }, 200)
   }
 
