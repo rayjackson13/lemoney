@@ -68,7 +68,6 @@
 
   const onBlur = () => {
     inputValue = selectedOption?.name ?? ''
-    setTimeout(closeDropdown, 100)
   }
 
   const onInput: FormEventHandler<HTMLInputElement> = (ev) => {
