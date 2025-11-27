@@ -41,6 +41,7 @@
       isSubmitting = true
       FirebaseController.addTransactions([transaction])
       closeModal()
+      transaction = createTransaction()
     } catch (e) {
       console.error(e)
     } finally {

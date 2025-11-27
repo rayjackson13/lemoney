@@ -114,7 +114,7 @@
   <input
     bind:this={inputRef}
     type="text"
-    class={clsx('Input md:pointer-events-all pointer-events-none w-full', classes?.input)}
+    class={clsx('Input pointer-events-none w-full md:pointer-events-auto', classes?.input)}
     onfocus={onFocus}
     oninput={onInput}
     value={formattedDate}
