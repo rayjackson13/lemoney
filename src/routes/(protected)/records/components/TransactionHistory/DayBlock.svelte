@@ -7,6 +7,7 @@
   import type { Position } from '$types/global'
   import { parseDateFromISOString } from '$utils/dates'
   import { FirebaseController } from '$utils/FirebaseController'
+  import { isTouchDevice } from '$utils/platform/getOS'
   import clsx from 'clsx'
   import { format } from 'date-fns'
   import { ru } from 'date-fns/locale'
@@ -20,6 +21,8 @@
   const { dateISO, disableHover, transactions }: Props = $props()
   let ctxMenuPosition = $state<Position | null>(null)
   let selectedId = $state<string | null>(null)
+  let touchTimer: ReturnType<typeof setTimeout>
+  let preventEvents = $state(false)
   const date = parseDateFromISOString(dateISO)
   const formatter = Intl.NumberFormat('ru', {
     maximumFractionDigits: 0,
@@ -43,8 +46,42 @@
     selectedId = null
   }
 
+  const openContextMenu = (target: HTMLElement | null, position: Position) => {
+    if (!target) return
+
+    selectedId = target.getAttribute('data-id')
+    ctxMenuPosition = position
+  }
+
+  const onTouchMove = () => {
+    clearTimeout(touchTimer)
+  }
+
+  const onTouchEnd = (ev: TouchEvent) => {
+    if (preventEvents) ev.preventDefault()
+    clearTimeout(touchTimer)
+    preventEvents = false
+  }
+
+  const onTouchStart = (ev: TouchEvent) => {
+    console.log('touch', ev.currentTarget, ev)
+    if (!ev.targetTouches.length) return
+
+    const target: HTMLElement = ev.currentTarget as HTMLElement
+    const touch: Touch = ev.targetTouches[0]
+
+    touchTimer = setTimeout(() => {
+      preventEvents = true
+      openContextMenu(target, { x: touch.clientX, y: touch.clientY })
+      // startCooldown()
+    }, 200)
+  }
+
   const onContextMenu = (ev: MouseEvent) => {
-    if (disableHover) return
+    if (disableHover || isTouchDevice()) {
+      ev.preventDefault()
+      return
+    }
 
     ev.preventDefault()
 
@@ -53,11 +90,7 @@
       return
     }
 
-    selectedId = (ev.currentTarget as HTMLElement).getAttribute('data-id')
-    ctxMenuPosition = {
-      x: ev.clientX,
-      y: ev.clientY,
-    }
+    openContextMenu(ev.currentTarget as HTMLElement, { x: ev.clientX, y: ev.clientY })
   }
 
   const removeTransaction = async (): Promise<void> => {
@@ -93,7 +126,7 @@
   ]
 </script>
 
-<div class="flex min-w-0 flex-col select-none">
+<div class="flex min-w-0 select-none flex-col">
   <div class="px-4 py-1 text-xs leading-[16px] opacity-70">
     {date ? format(date, 'd MMMM', { locale: ru }) : '<дата не указана>'}
   </div>
@@ -104,23 +137,26 @@
 
     <div
       class={clsx(
-        'flex h-10 items-center gap-2 px-4 py-1 transition-colors duration-50',
+        'duration-50 flex h-10 items-center gap-2 px-4 py-1 transition-colors',
         !disableHover && 'hover:bg-gray-100',
         selectedId === item.id && 'bg-gray-100',
       )}
       oncontextmenu={onContextMenu}
+      ontouchstart={onTouchStart}
+      ontouchend={onTouchEnd}
+      ontouchmove={onTouchMove}
       data-id={item.id}
       role="listitem"
     >
       <div
         class={clsx(
-          `h-full w-0 translate-z-0 rounded border-l-2  backface-hidden`,
+          `translate-z-0 backface-hidden h-full w-0 rounded  border-l-2`,
           `border-${ribbonColor}`,
         )}
       ></div>
 
       <div class="flex h-8 min-w-0 flex-1 flex-col overflow-hidden">
-        <p class="overflow-hidden text-sm leading-[1.2] text-ellipsis whitespace-nowrap">
+        <p class="overflow-hidden text-ellipsis whitespace-nowrap text-sm leading-[1.2]">
           {item.description || '<нет описания>'}
         </p>
 

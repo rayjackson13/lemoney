@@ -3,6 +3,7 @@ type ExtendedNavigator = Navigator & {
     platform: string
   }
 }
+
 export function getOS() {
   const { userAgentData } = navigator as ExtendedNavigator
 
@@ -16,4 +17,8 @@ export function getOS() {
   if (ua.includes('mac')) return 'mac'
   if (ua.includes('win')) return 'windows'
   return 'other'
+}
+
+export function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
 }
