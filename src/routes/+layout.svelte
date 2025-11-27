@@ -4,6 +4,7 @@
   import { FirebaseController } from '$utils/FirebaseController'
   import type { Snippet } from 'svelte'
   import { browser } from '$app/environment'
+  import { isTouchDevice } from '$utils/platform/getOS'
 
   type Props = {
     children: Snippet<[]>
@@ -16,14 +17,12 @@
   })
 
   if (browser) {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-
     // Disable body scroll on iOS when the keyboard is open
     window.addEventListener('focusin', () => {
       const focusedEl = document.activeElement
 
       if (
-        isTouchDevice &&
+        isTouchDevice() &&
         (focusedEl instanceof HTMLInputElement || focusedEl instanceof HTMLTextAreaElement)
       ) {
         document.body.style.position = 'fixed'
@@ -37,7 +36,7 @@
     })
 
     window.addEventListener('focusout', () => {
-      if (isTouchDevice) document.body.style.position = ''
+      if (isTouchDevice()) document.body.style.position = ''
     })
   }
 </script>
