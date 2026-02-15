@@ -17,7 +17,6 @@ export const addTransactions = async (data: Transaction[]): Promise<void> => {
     if (count === 5) {
       await batch.commit()
       batch = writeBatch(db)
-      count = 0
     }
   }
 
