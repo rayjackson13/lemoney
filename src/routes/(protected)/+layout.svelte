@@ -2,7 +2,6 @@
   import Header from '$components/common/Header/index.svelte'
   import { fly } from 'svelte/transition'
   import { type Snippet } from 'svelte'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { timePeriod } from '$stores/timePeriod'
   import { userStore } from '$stores/user'
   import { goto } from '$app/navigation'
@@ -12,6 +11,7 @@
   import TimeBlock from '$components/common/Header/TimeBlock.svelte'
   import { useMediaQuery } from '$utils/hooks/useMediaQuery'
   import CreateTransactionModal from '$components/modals/CreateTransactionModal/CreateTransactionModal.svelte'
+  import { watchTransactions } from '$utils/firebase/transactions/watch'
 
   type Props = {
     children: Snippet<[]>
@@ -23,7 +23,7 @@
 
   $effect(() => {
     if ($appReady && !!$userStore.user) {
-      unsubscribe = FirebaseController.watchTransactions($timePeriod)
+      unsubscribe = watchTransactions($timePeriod)
     }
 
     return () => {

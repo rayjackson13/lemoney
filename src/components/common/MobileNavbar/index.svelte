@@ -1,13 +1,13 @@
 <script lang="ts">
   import { userStore } from '$stores/user'
   import type { NavigationItem } from '$types/navigation'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { fly, slide } from 'svelte/transition'
   import './MobileNavbar.css'
   import NavLink from './NavLink.svelte'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import clsx from 'clsx'
   import { isCreateModalOpen } from '$stores/isCreateModalOpen'
+  import { logout } from '$utils/firebase/auth/logout'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -24,9 +24,13 @@
     isCreateModalOpen.set(true)
   }
 
-  const logout = async (): Promise<void> => {
-    await FirebaseController.logout()
-    closeMenu()
+  const onLogout = async (): Promise<void> => {
+    try {
+      await logout()
+      closeMenu()
+    } catch {
+      console.error('Произошла ошибка при попытке выйти')
+    }
   }
 
   const navItems: NavigationItem[] = [
@@ -124,7 +128,7 @@
                 <button
                   class="flex w-full items-center py-1 active:bg-neutral-200"
                   type="button"
-                  onclick={logout}
+                  onclick={onLogout}
                 >
                   <i class="fas fa-arrow-right-from-bracket w-10! text-left! pl-6 text-sm"></i>
                   <span class="px-3">Выйти</span>

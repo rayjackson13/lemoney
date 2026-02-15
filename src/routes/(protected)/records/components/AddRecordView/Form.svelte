@@ -5,8 +5,8 @@
   import { parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { createTransaction } from '$utils/transactions/createTransaction'
+  import { addTransactions } from '$utils/firebase/transactions/add'
 
   let records = $state<Transaction[]>([createTransaction()])
   let isSubmitting = $state(false)
@@ -64,7 +64,7 @@
 
     try {
       isSubmitting = true
-      FirebaseController.addTransactions(validRows)
+      addTransactions(validRows)
       records = [createTransaction()]
       queueMicrotask(() => {
         focusLastRecord()

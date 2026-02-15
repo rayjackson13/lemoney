@@ -6,7 +6,7 @@
   import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
   import { parseDateFromISOString } from '$utils/dates'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
+  import { removeTransaction } from '$utils/firebase/transactions/remove'
   import { isTouchDevice } from '$utils/platform/getOS'
   import clsx from 'clsx'
   import { format } from 'date-fns'
@@ -92,11 +92,11 @@
     openContextMenu(ev.currentTarget as HTMLElement, { x: ev.clientX, y: ev.clientY })
   }
 
-  const removeTransaction = async (): Promise<void> => {
+  const handleRemoveTransaction = async (): Promise<void> => {
     if (!selectedId) return
 
     try {
-      FirebaseController.removeTransaction(selectedId)
+      removeTransaction(selectedId)
     } catch (e) {
       console.error(e)
     }
@@ -120,7 +120,7 @@
     {
       icon: 'fas fa-close',
       name: 'Удалить',
-      onClick: removeTransaction,
+      onClick: handleRemoveTransaction,
     },
   ]
 </script>

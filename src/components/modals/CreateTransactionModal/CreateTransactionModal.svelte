@@ -7,7 +7,7 @@
   import { transactionTypes } from '$stores/transactionTypes'
   import type { Transaction } from '$types/forms'
   import { parseDateFromISOString } from '$utils/dates'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
+  import { addTransactions } from '$utils/firebase/transactions/add'
   import { createTransaction } from '$utils/transactions/createTransaction'
   import { onMount } from 'svelte'
   import { fade, fly } from 'svelte/transition'
@@ -39,7 +39,7 @@
 
     try {
       isSubmitting = true
-      FirebaseController.addTransactions([transaction])
+      addTransactions([transaction])
       closeModal()
       transaction = createTransaction()
     } catch (e) {

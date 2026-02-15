@@ -2,7 +2,7 @@
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
   import { appReady } from '$stores/appReady.js'
-  import { FirebaseController } from '$utils/firebase/FirebaseController.js'
+  import { authorize } from '$utils/firebase/auth/authorize.js'
   import { Spring } from 'svelte/motion'
 
   let { data } = $props()
@@ -54,7 +54,7 @@
 
   const onLoginPressed = async () => {
     try {
-      await FirebaseController.authorize()
+      await authorize()
     } catch (e) {
       console.error(e)
     }

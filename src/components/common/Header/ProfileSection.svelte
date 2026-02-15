@@ -3,7 +3,7 @@
   import { fly, slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { userStore } from '$stores/user'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
+  import { logout } from '$utils/firebase/auth/logout'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -16,8 +16,12 @@
     isMenuOpen = false
   }
 
-  const logout = async (): Promise<void> => {
-    await FirebaseController.logout()
+  const onLogout = async (): Promise<void> => {
+    try {
+      await logout()
+    } catch {
+      console.error('Произошла ошибка при попытке выйти')
+    }
   }
 </script>
 
@@ -58,7 +62,7 @@
             <button
               class="flex w-full items-center py-1 hover:bg-neutral-700"
               type="button"
-              onclick={logout}
+              onclick={onLogout}
             >
               <i class="fas fa-arrow-right-from-bracket w-8! text-left! pl-4 text-xs"></i>
               <span class="px-3">Выйти</span>

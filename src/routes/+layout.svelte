@@ -1,10 +1,10 @@
 <script lang="ts">
   import '../tw.css'
   import '../styles/index.scss'
-  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import type { Snippet } from 'svelte'
   import { browser } from '$app/environment'
   import { isTouchDevice } from '$utils/platform/getOS'
+  import { loadInitialData } from '$utils/firebase/helpers/loadInitialData'
 
   type Props = {
     children: Snippet<[]>
@@ -13,7 +13,11 @@
   let { children }: Props = $props()
 
   $effect.pre(() => {
-    FirebaseController.initialize()
+    try {
+      loadInitialData()
+    } catch {
+      console.error('Не удалось загрузить данные')
+    }
   })
 
   if (browser) {
