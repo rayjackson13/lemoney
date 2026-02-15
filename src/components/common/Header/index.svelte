@@ -7,20 +7,8 @@
 
   const navItems: NavigationItem[] = [
     {
-      path: '/dashboard',
-      label: 'Главная',
-    },
-    {
       path: '/records',
       label: 'Бюджет',
-    },
-    {
-      path: '/planning',
-      label: 'Планирование',
-    },
-    {
-      path: '/goals',
-      label: 'Цели',
     },
     {
       path: '/settings',
