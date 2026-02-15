@@ -53,12 +53,6 @@
       <aside class="items-center overflow-hidden py-2 text-sm" transition:slide={{ duration: 150 }}>
         <ul>
           <li in:fly={{ x: -20 }}>
-            <a class="flex items-center py-1 hover:bg-neutral-700" href="/help">
-              <i class="fas fa-question w-8! text-left! pl-4 text-xs"></i>
-              <span class="px-3">Справка</span>
-            </a>
-          </li>
-          <li in:fly={{ x: -20, delay: 50 }}>
             <button
               class="flex w-full items-center py-1 hover:bg-neutral-700"
               type="button"
