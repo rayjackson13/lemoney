@@ -5,7 +5,7 @@
   import { parseDateFromISOString } from '$utils/dates'
   import { isValid } from 'date-fns'
   import { isEqual } from '$utils/isEqual'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { createTransaction } from '$utils/transactions/createTransaction'
 
   let records = $state<Transaction[]>([createTransaction()])

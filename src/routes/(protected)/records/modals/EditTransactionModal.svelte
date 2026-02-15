@@ -7,7 +7,7 @@
   import { transactionTypes } from '$stores/transactionTypes'
   import type { Transaction } from '$types/forms'
   import { parseDateFromISOString } from '$utils/dates'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
 

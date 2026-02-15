@@ -1,7 +1,7 @@
 <script lang="ts">
   import { userStore } from '$stores/user'
   import type { NavigationItem } from '$types/navigation'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { fly, slide } from 'svelte/transition'
   import './MobileNavbar.css'
   import NavLink from './NavLink.svelte'

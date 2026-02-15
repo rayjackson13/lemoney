@@ -3,7 +3,7 @@
   import { fly, slide } from 'svelte/transition'
   import { onOutsideClick } from '$utils/ui/onOutsideClick'
   import { userStore } from '$stores/user'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
 
   const user = $derived($userStore.user)
   let isMenuOpen = $state(false)
@@ -24,8 +24,8 @@
 {#if user}
   <div
     class={clsx(
-      'AppHeader-userMenu absolute top-0 right-4 z-1 flex min-h-full',
-      'cursor-pointer flex-col rounded-lg backdrop-blur-xs transition-colors',
+      'AppHeader-userMenu z-1 absolute right-4 top-0 flex min-h-full',
+      'backdrop-blur-xs cursor-pointer flex-col rounded-lg transition-colors',
       isMenuOpen && 'AppHeader-userMenu--open shadow-sm',
     )}
     use:onOutsideClick={{ callback: closeMenu }}
@@ -50,7 +50,7 @@
         <ul>
           <li in:fly={{ x: -20 }}>
             <a class="flex items-center py-1 hover:bg-neutral-700" href="/help">
-              <i class="fas fa-question w-8! pl-4 text-left! text-xs"></i>
+              <i class="fas fa-question w-8! text-left! pl-4 text-xs"></i>
               <span class="px-3">Справка</span>
             </a>
           </li>
@@ -60,7 +60,7 @@
               type="button"
               onclick={logout}
             >
-              <i class="fas fa-arrow-right-from-bracket w-8! pl-4 text-left! text-xs"></i>
+              <i class="fas fa-arrow-right-from-bracket w-8! text-left! pl-4 text-xs"></i>
               <span class="px-3">Выйти</span>
             </button>
           </li>

@@ -2,7 +2,7 @@
   import Header from '$components/common/Header/index.svelte'
   import { fly } from 'svelte/transition'
   import { type Snippet } from 'svelte'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { timePeriod } from '$stores/timePeriod'
   import { userStore } from '$stores/user'
   import { goto } from '$app/navigation'

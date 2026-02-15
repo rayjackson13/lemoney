@@ -6,7 +6,7 @@
   import type { ContextMenuOption, Option, Transaction } from '$types/forms'
   import type { Position } from '$types/global'
   import { parseDateFromISOString } from '$utils/dates'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import { isTouchDevice } from '$utils/platform/getOS'
   import clsx from 'clsx'
   import { format } from 'date-fns'

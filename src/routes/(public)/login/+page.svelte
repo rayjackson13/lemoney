@@ -2,7 +2,7 @@
   import Logo from '$assets/icons/logo.svg?component'
   import QuoteView from '$components/login/QuoteView.svelte'
   import { appReady } from '$stores/appReady.js'
-  import { FirebaseController } from '$utils/FirebaseController.js'
+  import { FirebaseController } from '$utils/firebase/FirebaseController.js'
   import { Spring } from 'svelte/motion'
 
   let { data } = $props()

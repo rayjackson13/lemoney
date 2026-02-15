@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../tw.css'
   import '../styles/index.scss'
-  import { FirebaseController } from '$utils/FirebaseController'
+  import { FirebaseController } from '$utils/firebase/FirebaseController'
   import type { Snippet } from 'svelte'
   import { browser } from '$app/environment'
   import { isTouchDevice } from '$utils/platform/getOS'
