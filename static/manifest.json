@@ -1,0 +1,19 @@
+{
+  "name": "Lemoney 🍋",
+  "short_name": "Lemoney",
+  "description": "Твой финансовый помощник",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#202936",
+  "background_color": "#202936",
+  "icons": [
+    {
+      "src": "/static/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "handle_links": "preferred"
+}

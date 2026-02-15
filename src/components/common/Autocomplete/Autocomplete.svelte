@@ -182,10 +182,6 @@
       window.removeEventListener('resize', onWindowResize)
     }
   })
-
-  $effect(() => {
-    console.log(highlightedIndex)
-  })
 </script>
 
 <div
